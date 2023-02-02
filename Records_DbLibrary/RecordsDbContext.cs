@@ -4,18 +4,18 @@ using Microsoft.Extensions.Configuration;
 
 namespace DbLibrary
 {
-    public class RecordDbContext : DbContext
+    public class RecordsDbContext : DbContext
     {
 
         private static IConfigurationRoot _configuration;
 
         
-        public RecordDbContext()
+        public RecordsDbContext()
         {
 
         }
 
-        public RecordDbContext(DbContextOptions options)
+        public RecordsDbContext(DbContextOptions options)
             : base(options)
         {
 

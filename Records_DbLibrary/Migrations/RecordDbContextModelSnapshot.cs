@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace RecordsDbLibrary.Migrations
 {
-    [DbContext(typeof(RecordDbContext))]
+    [DbContext(typeof(RecordsDbContext))]
     partial class RecordDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

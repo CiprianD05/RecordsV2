@@ -16,6 +16,7 @@ namespace RecordsModels
         public string SocialSecurityNumber { get; set; }
 
         [MaxLength(100)]
+        [Required]
         public string? PassportNumber { get; set; }
 
     }

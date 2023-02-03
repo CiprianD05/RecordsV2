@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RecordsDbLibrary;
 
@@ -10,9 +11,11 @@ using RecordsDbLibrary;
 namespace RecordsDbLibrary.Migrations
 {
     [DbContext(typeof(RecordsDbContext))]
-    partial class RecordDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230203163836_AddedCitizensTable")]
+    partial class AddedCitizensTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -35,7 +38,6 @@ namespace RecordsDbLibrary.Migrations
                         .HasColumnType("nvarchar(255)");
 
                     b.Property<string>("PassportNumber")
-                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 

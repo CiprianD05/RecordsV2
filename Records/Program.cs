@@ -1,13 +1,18 @@
 using Microsoft.EntityFrameworkCore;
+using System.Data.SqlClient;
 
 var builder = WebApplication.CreateBuilder(args);
-var configBuilder= new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", optional: true,
-                    reloadOnChange: true).AddUserSecrets<Program>();
+var conStrBuilder = new SqlConnectionStringBuilder(
+        builder.Configuration.GetConnectionString("Records"));
+conStrBuilder.UserID = builder.Configuration["UserId"];
+conStrBuilder.Password = builder.Configuration["Password"];
 
 
-builder.Services.AddDbContext<RecordsDbLibrary.RecordsDbContext>(opts => {
-    opts.UseSqlServer(configBuilder.Build().GetConnectionString("Records"));
+var connection = conStrBuilder.ConnectionString;
+
+builder.Services.AddDbContext<RecordsDbLibrary.RecordsDbContext>(opts =>
+{
+    opts.UseSqlServer(connection);
 });
 // Add services to the container.
 //builder.Services.AddRazorPages();

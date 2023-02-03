@@ -15,7 +15,7 @@ namespace Record.Controllers
 
         public IActionResult Index()
         {
-            _repo.GetAllCitizens();
+            
             return View();
         }
     }

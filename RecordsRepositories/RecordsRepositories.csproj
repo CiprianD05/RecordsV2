@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\RecordsModels\RecordsModels.csproj" />
+    <ProjectReference Include="..\Records_DbLibrary\Records_DbLibrary.csproj" />
   </ItemGroup>
 
 </Project>

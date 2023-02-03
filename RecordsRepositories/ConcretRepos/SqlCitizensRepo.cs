@@ -20,7 +20,7 @@ namespace RecordsRepositories.ConcretRepos
 
         public void CreateCitizen(Citizen citizen)
         {
-            throw new NotImplementedException();
+            context.Add(citizen);
         }
 
         public void DeleteCitizen(Citizen citizen)
@@ -35,12 +35,12 @@ namespace RecordsRepositories.ConcretRepos
 
         public IEnumerable<Citizen> GetAllCitizens()
         {
-            throw new NotImplementedException();
+            return context.Citizens;
         }
 
         public bool SaveChanges()
         {
-            throw new NotImplementedException();
+            return context.SaveChanges() > 0;
         }
 
         public void UpdateCitizen(Citizen citizen)

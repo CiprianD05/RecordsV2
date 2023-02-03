@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
+	  <UserSecretsId>29C15812-2A2D-4C2C-B477-9F6EB7A89F2C</UserSecretsId>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
@@ -14,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\RecordsRepositories\RecordsRepositories.csproj" />
     <ProjectReference Include="..\Records_DbLibrary\Records_DbLibrary.csproj" />
   </ItemGroup>
 

@@ -1,8 +1,15 @@
+
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 //builder.Services.AddRazorPages();
 builder.Services.AddControllersWithViews();
+builder.Services.AddScoped<RecordsRepositories.Interfaces.ICitizenRepo, 
+    RecordsRepositories.ConcretRepos.SqlCitizensRepo>();
+
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -20,6 +27,8 @@ app.UseRouting();
 
 app.UseAuthorization();
 
-app.MapRazorPages();
+app.MapDefaultControllerRoute();
+
+//app.MapRazorPages();
 
 app.Run();

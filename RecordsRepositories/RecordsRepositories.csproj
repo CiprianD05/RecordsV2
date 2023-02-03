@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="ConcreetRepos\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\RecordsModels\RecordsModels.csproj" />
   </ItemGroup>
 

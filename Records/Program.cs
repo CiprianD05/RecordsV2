@@ -1,7 +1,14 @@
-
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+var configBuilder= new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: true,
+                    reloadOnChange: true).AddUserSecrets<Program>();
 
+
+builder.Services.AddDbContext<RecordsDbLibrary.RecordsDbContext>(opts => {
+    opts.UseSqlServer(configBuilder.Build().GetConnectionString("Records"));
+});
 // Add services to the container.
 //builder.Services.AddRazorPages();
 builder.Services.AddControllersWithViews();
@@ -27,7 +34,7 @@ app.UseRouting();
 
 app.UseAuthorization();
 
-app.MapDefaultControllerRoute();
+app.MapDefaultControllerRoute(); 
 
 //app.MapRazorPages();
 

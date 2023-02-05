@@ -6,8 +6,6 @@ var conStrBuilder = new SqlConnectionStringBuilder(
         builder.Configuration.GetConnectionString("Records"));
 conStrBuilder.UserID = builder.Configuration["UserId"];
 conStrBuilder.Password = builder.Configuration["Password"];
-
-
 var connection = conStrBuilder.ConnectionString;
 
 builder.Services.AddDbContext<RecordsDbLibrary.RecordsDbContext>(opts =>
@@ -17,6 +15,7 @@ builder.Services.AddDbContext<RecordsDbLibrary.RecordsDbContext>(opts =>
 // Add services to the container.
 //builder.Services.AddRazorPages();
 builder.Services.AddControllersWithViews();
+
 builder.Services.AddScoped<RecordsRepositories.Interfaces.ICitizenRepo, 
     RecordsRepositories.ConcretRepos.SqlCitizensRepo>();
 

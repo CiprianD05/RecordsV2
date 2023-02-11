@@ -30,7 +30,7 @@ namespace RecordsRepositories.ConcretRepos
 
         public Citizen GetAllCitizenById(int Id)
         {
-            throw new NotImplementedException();
+            return context.Citizens.SingleOrDefault(c => c.Id == Id);
         }
 
         public IEnumerable<Citizen> GetAllCitizens()

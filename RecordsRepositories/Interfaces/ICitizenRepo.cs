@@ -9,10 +9,10 @@ namespace RecordsRepositories.Interfaces
 {
     public interface ICitizenRepo
     {
-        bool SaveChanges();
+        Task<bool> SaveChanges();
         IEnumerable<Citizen> GetAllCitizens();
-        Citizen GetAllCitizenById(int Id);
-        void CreateCitizen(Citizen citizen);
+        Task<Citizen> GetAllCitizenById(int Id);
+        Task<Citizen> CreateCitizen(Citizen citizen);
         void UpdateCitizen(Citizen citizen);
         void DeleteCitizen(Citizen citizen);
 

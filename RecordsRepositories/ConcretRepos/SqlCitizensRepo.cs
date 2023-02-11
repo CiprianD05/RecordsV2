@@ -19,9 +19,15 @@ namespace RecordsRepositories.ConcretRepos
             this.context = context;
         }
 
-        public async void CreateCitizen(Citizen citizen)
+        public async Task<Citizen> CreateCitizen(Citizen citizen)
         {
-           await context.AddAsync(citizen);
+            if (citizen == null)
+            {
+                throw new ArgumentNullException(nameof(citizen));
+            }
+
+            Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry<Citizen> entityEntry = await context.AddAsync(citizen);
+            return entityEntry.Entity;
         }
 
         public void DeleteCitizen(Citizen citizen)
@@ -39,9 +45,9 @@ namespace RecordsRepositories.ConcretRepos
             return context.Citizens;
         }
 
-        public bool SaveChanges()
+        public async Task<bool> SaveChanges()
         {
-            return context.SaveChanges() > 0;
+            return await context.SaveChangesAsync() > 0;
         }
 
         public void UpdateCitizen(Citizen citizen)

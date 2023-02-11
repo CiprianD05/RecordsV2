@@ -23,16 +23,26 @@ namespace Records.Controllers
         }
 
         [HttpGet("{id}")]
-        public   ActionResult<Citizen> GetCitizenById(int id)
+        public ActionResult<Citizen> GetCitizenById(int id)
         {
-            var citizenById =  _citizenRepo.GetAllCitizenById(id);
-            
-            if(citizenById==null)
+            var citizenById = _citizenRepo.GetAllCitizenById(id);
+
+            if (citizenById == null)
                 return NotFound();
-            
+
             return Ok(citizenById);
         }
-        
-        
+
+        [HttpPost]
+        public ActionResult<Citizen> CreateCitizen(Citizen citizen)
+        {
+            var newCitizen= _citizenRepo.CreateCitizen(citizen);
+            _citizenRepo.SaveChanges();
+
+            return Ok(newCitizen);
+            
+        }
+
+
     }
 }

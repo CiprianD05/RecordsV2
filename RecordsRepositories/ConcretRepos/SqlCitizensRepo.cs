@@ -18,9 +18,9 @@ namespace RecordsRepositories.ConcretRepos
             this.context = context;
         }
 
-        public void CreateCitizen(Citizen citizen)
+        public async void CreateCitizen(Citizen citizen)
         {
-            context.Add(citizen);
+           await context.AddAsync(citizen);
         }
 
         public void DeleteCitizen(Citizen citizen)

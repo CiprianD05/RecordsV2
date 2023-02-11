@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Data.SqlClient;
 
 var builder = WebApplication.CreateBuilder(args);
+
 var conStrBuilder = new SqlConnectionStringBuilder(
         builder.Configuration.GetConnectionString("Records"));
 conStrBuilder.UserID = builder.Configuration["UserId"];
@@ -19,7 +20,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<RecordsRepositories.Interfaces.ICitizenRepo, 
     RecordsRepositories.ConcretRepos.SqlCitizensRepo>();
 
-
+builder.Services.AddControllers();
 
 var app = builder.Build();
 
@@ -34,11 +35,16 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
-app.UseRouting();
-
 app.UseAuthorization();
 
-app.MapDefaultControllerRoute(); 
+app.UseRouting();
+app.UseEndpoints(endpoints =>
+{ 
+    endpoints.MapControllers();
+});
+
+
+//app.MapDefaultControllerRoute(); 
 
 //app.MapRazorPages();
 

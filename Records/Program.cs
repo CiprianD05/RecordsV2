@@ -44,7 +44,7 @@ app.UseEndpoints(endpoints =>
 });
 
 
-//app.MapDefaultControllerRoute(); 
+app.MapDefaultControllerRoute(); 
 
 //app.MapRazorPages();
 

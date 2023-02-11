@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using RecordsDbLibrary;
 using RecordsModels;
 using RecordsRepositories.Interfaces;
@@ -28,9 +29,9 @@ namespace RecordsRepositories.ConcretRepos
             throw new NotImplementedException();
         }
 
-        public Citizen GetAllCitizenById(int Id)
+        public async Task<Citizen> GetAllCitizenById(int Id)
         {
-            return context.Citizens.SingleOrDefault(c => c.Id == Id);
+            return await context.Citizens.SingleOrDefaultAsync(c => c.Id == Id);
         }
 
         public IEnumerable<Citizen> GetAllCitizens()

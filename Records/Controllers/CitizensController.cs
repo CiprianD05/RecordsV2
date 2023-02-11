@@ -23,9 +23,9 @@ namespace Records.Controllers
         }
 
         [HttpGet("{id}")]
-        public ActionResult<Citizen> GetCitizenById(int id)
+        public   ActionResult<Citizen> GetCitizenById(int id)
         {
-            var citizenById = _citizenRepo.GetAllCitizenById(id);
+            var citizenById =  _citizenRepo.GetAllCitizenById(id);
             
             if(citizenById==null)
                 return NotFound();

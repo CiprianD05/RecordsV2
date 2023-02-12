@@ -20,6 +20,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<RecordsRepositories.Interfaces.ICitizenRepo, 
     RecordsRepositories.ConcretRepos.SqlCitizensRepo>();
 
+builder.Services.AddAutoMapper(typeof(RecordsDTOs.AnchorProfile));
 builder.Services.AddControllers();
 
 var app = builder.Build();

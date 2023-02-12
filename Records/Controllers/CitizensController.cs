@@ -43,6 +43,38 @@ namespace Records.Controllers
             
         }
 
+        [HttpPut]
+        public ActionResult<Citizen> UpdateCitizen(Citizen citizen)
+        {
+            var dbCitizen = _citizenRepo.GetAllCitizenById(citizen.Id);
+            if (citizen == null)
+                return NotFound();
+
+            dbCitizen.Result.Name=citizen.Name;
+            dbCitizen.Result.SocialSecurityNumber=citizen.SocialSecurityNumber;
+            dbCitizen.Result.PassportNumber = citizen.PassportNumber;
+
+            _citizenRepo.SaveChanges();
+
+            return Ok();
+        }
+
+        [HttpDelete]
+        public async Task<ActionResult> DeleteCitizen(Citizen citizen)
+        {
+            var dbCitizen = await _citizenRepo.GetAllCitizenById(citizen.Id);
+            
+            if(dbCitizen==null)
+                return NotFound();
+
+
+            _citizenRepo.DeleteCitizen(dbCitizen);
+            await _citizenRepo.SaveChanges();
+
+            return Ok();
+
+        }
+
 
     }
 }

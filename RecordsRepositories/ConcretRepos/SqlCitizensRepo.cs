@@ -32,7 +32,7 @@ namespace RecordsRepositories.ConcretRepos
 
         public void DeleteCitizen(Citizen citizen)
         {
-            throw new NotImplementedException();
+            context.Citizens.Remove(citizen);
         }
 
         public async Task<Citizen> GetAllCitizenById(int Id)
@@ -52,7 +52,8 @@ namespace RecordsRepositories.ConcretRepos
 
         public void UpdateCitizen(Citizen citizen)
         {
-            throw new NotImplementedException();
+
+           
         }
     }
 }

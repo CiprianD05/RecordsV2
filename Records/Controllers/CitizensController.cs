@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RecordsRepositories.Interfaces;
 using RecordsModels;
+using AutoMapper;
+using RecordsDTOs.CitizensDTOs;
 
 namespace Records.Controllers
 {
@@ -9,17 +11,19 @@ namespace Records.Controllers
     public class CitizensController : ControllerBase
     {
         private readonly ICitizenRepo _citizenRepo;
+        private readonly IMapper _mapper;
 
-        public CitizensController(ICitizenRepo citizenRepo)
+        public CitizensController(ICitizenRepo citizenRepo, IMapper mapper)
         {
             _citizenRepo = citizenRepo;
+            _mapper = mapper;
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<Citizen>> Get()
+        public ActionResult<IEnumerable<CitizenReadDTO>> Get()
         {
             var citizenList = _citizenRepo.GetAllCitizens();
-            return Ok(citizenList);
+            return Ok(_mapper.Map<IEnumerable<CitizenReadDTO>>(citizenList));
         }
 
         [HttpGet("{id}")]
@@ -30,7 +34,7 @@ namespace Records.Controllers
             if (citizenById == null)
                 return NotFound();
 
-            return Ok(citizenById);
+            return Ok(_mapper.Map<CitizenReadDTO>(citizenById));
         }
 
         [HttpPost]

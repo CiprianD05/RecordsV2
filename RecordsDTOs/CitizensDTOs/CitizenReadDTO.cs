@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace RecordsDTOs.CitizensDTOs
 {
-    public class CitizenDTO
+    public class CitizenReadDTO
     {
         
         [Required]

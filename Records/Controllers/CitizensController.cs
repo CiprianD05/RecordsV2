@@ -65,9 +65,9 @@ namespace Records.Controllers
         }
 
         [HttpDelete]
-        public async Task<ActionResult> DeleteCitizen(Citizen citizen)
+        public async Task<ActionResult> DeleteCitizen(int Id)
         {
-            var dbCitizen = await _citizenRepo.GetAllCitizenById(citizen.Id);
+            var dbCitizen = await _citizenRepo.GetAllCitizenById(Id);
             
             if(dbCitizen==null)
                 return NotFound();

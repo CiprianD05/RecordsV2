@@ -13,6 +13,8 @@ namespace RecordsDTOs.Profiles.CitizensProfiles
         public CitizenAutoMappingProfile()
         {
             CreateMap<Citizen, CitizensDTOs.CitizenReadDTO>();
+            CreateMap<CitizensDTOs.CitizenCreateDTO, Citizen>();
+            CreateMap<CitizensDTOs.CitizenUpdateDTO, Citizen>();
         }
     }
 }

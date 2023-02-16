@@ -38,25 +38,26 @@ namespace Records.Controllers
         }
 
         [HttpPost]
-        public ActionResult<Citizen> CreateCitizen(Citizen citizen)
+        public ActionResult<Citizen> CreateCitizen(CitizenCreateDTO citizenCreateDto)
         {
-            var newCitizen= _citizenRepo.CreateCitizen(citizen);
+            var citizenModel = _mapper.Map<Citizen>(citizenCreateDto);
+            _citizenRepo.CreateCitizen(citizenModel);
             _citizenRepo.SaveChanges();
-
-            return Ok(newCitizen);
+            var commandReadDto = _mapper.Map<CitizenReadDTO>(citizenModel);
+            return CreatedAtRoute(nameof(GetCitizenById), new { Id=commandReadDto.Id},commandReadDto);
             
         }
 
         [HttpPut]
-        public ActionResult<Citizen> UpdateCitizen(Citizen citizen)
+        public ActionResult<Citizen> UpdateCitizen(int Id,CitizenUpdateDTO citizenUpdateDto)
         {
-            var dbCitizen = _citizenRepo.GetAllCitizenById(citizen.Id);
-            if (citizen == null)
-                return NotFound();
 
-            dbCitizen.Result.Name=citizen.Name;
-            dbCitizen.Result.SocialSecurityNumber=citizen.SocialSecurityNumber;
-            dbCitizen.Result.PassportNumber = citizen.PassportNumber;
+
+            var dbCitizen = _citizenRepo.GetAllCitizenById(Id);
+            if (dbCitizen == null)
+                return NotFound();
+            
+            _mapper.Map(citizenUpdateDto,dbCitizen);          
 
             _citizenRepo.SaveChanges();
 

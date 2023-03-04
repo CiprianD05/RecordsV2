@@ -27,9 +27,9 @@ namespace Records.Controllers
         }
 
         [HttpGet("{id}")]
-        public ActionResult<Citizen> GetCitizenById(int id)
+        public async Task<ActionResult<CitizenReadDTO>> GetCitizenById(int id)
         {
-            var citizenById = _citizenRepo.GetAllCitizenById(id);
+            var citizenById =await _citizenRepo.GetAllCitizenById(id);
 
             if (citizenById == null)
                 return NotFound();
@@ -38,28 +38,29 @@ namespace Records.Controllers
         }
 
         [HttpPost]
-        public ActionResult<Citizen> CreateCitizen(CitizenCreateDTO citizenCreateDto)
+        public async Task<ActionResult<CitizenReadDTO>> CreateCitizen(CitizenCreateDTO citizenCreateDto)
         {
             var citizenModel = _mapper.Map<Citizen>(citizenCreateDto);
             _citizenRepo.CreateCitizen(citizenModel);
-            _citizenRepo.SaveChanges();
-            var commandReadDto = _mapper.Map<CitizenReadDTO>(citizenModel);
-            return CreatedAtRoute(nameof(GetCitizenById), new { Id=commandReadDto.Id},commandReadDto);
+            await _citizenRepo.SaveChanges();
+            var citizenReadDto = _mapper.Map<CitizenReadDTO>(citizenModel);
+            return CreatedAtRoute(nameof(GetCitizenById), new { Id=citizenReadDto.Id},citizenReadDto);
             
         }
 
         [HttpPut]
-        public ActionResult<Citizen> UpdateCitizen(int Id,CitizenUpdateDTO citizenUpdateDto)
+        public async Task<ActionResult> UpdateCitizen(int Id,CitizenUpdateDTO citizenUpdateDto)
         {
 
 
             var dbCitizen = _citizenRepo.GetAllCitizenById(Id);
+
             if (dbCitizen == null)
                 return NotFound();
             
             _mapper.Map(citizenUpdateDto,dbCitizen);          
 
-            _citizenRepo.SaveChanges();
+             await _citizenRepo.SaveChanges();
 
             return Ok();
         }

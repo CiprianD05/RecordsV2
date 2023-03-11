@@ -25,20 +25,27 @@ namespace RecordsDbLibrary
         {
             if (!optionsBuilder.IsConfigured)
             {
-                var builder = new ConfigurationBuilder()
-                    .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.Development.json", optional: true, reloadOnChange: true)
-                .AddUserSecrets<RecordsDbContext>()
-                .AddEnvironmentVariables();
-                
+                string basePath = Directory.GetCurrentDirectory();
+                string relativePath = @"..\Records\appsettings.Development.json";
+                string absolutePath = Path.Combine(basePath, relativePath);
+
+                IConfigurationRoot configuration = new ConfigurationBuilder()
+                    .SetBasePath(basePath)
+                    .AddJsonFile(absolutePath, optional: true)
+                    .AddUserSecrets<RecordsDbContext>()
+                    .Build();
+
+
+                var conStrBuilder = new SqlConnectionStringBuilder(
+                configuration.GetConnectionString("Records"));
+                conStrBuilder.UserID = configuration["UserId"];
+                conStrBuilder.Password = configuration["Password"];
+                var connection = conStrBuilder.ConnectionString;
+
                 
 
 
-                _configuration = builder.Build();
-                
-                var cnstr = _configuration.GetConnectionString("Records");
-
-                optionsBuilder.UseSqlServer(cnstr);
+                optionsBuilder.UseSqlServer(connection);
             }
         }
 

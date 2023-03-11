@@ -9,7 +9,11 @@ namespace RecordsModels
 
         [Required]
         [MaxLength(255)]
-        public string Name { get; set; }
+        public string FirstName { get; set; }
+
+        [Required]
+        [MaxLength(255)]
+        public string LastName { get; set; }
 
         [Required]
         [MaxLength(100)]

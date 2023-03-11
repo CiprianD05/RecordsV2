@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using System.Data.SqlClient;
+using Microsoft.AspNetCore.Cors;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,8 +23,17 @@ builder.Services.AddScoped<RecordsRepositories.Interfaces.ICitizenRepo,
 
 builder.Services.AddAutoMapper(typeof(RecordsDTOs.AnchorProfile));
 builder.Services.AddControllers();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowOrigin",
+        builder => builder.WithOrigins("https://localhost:7098")
+                          .AllowAnyHeader()
+                          .AllowAnyMethod());
+});
 
 var app = builder.Build();
+
+app.UseCors("AllowOrigin");
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

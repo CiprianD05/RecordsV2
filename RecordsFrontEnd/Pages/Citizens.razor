@@ -1,0 +1,42 @@
+﻿@page "/citizens"
+@inject ICitizenService CitizenService
+
+
+<PageTitle>Citizens</PageTitle>
+
+
+
+<h3>Citizens</h3>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Social security number</th>
+            <th>Passport number</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var citizen in CitizenService.Citizens)
+        {
+            <tr>
+            <td>@citizen.Id</td>
+            <td>@citizen.FirstName</td>
+            <td>@citizen.LastName</td>
+            <td>@citizen.SocialSecurityNumber</td>
+            <td>@citizen.PassportNumber</td> 
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        await CitizenService.GetCitizens();
+    }
+}

@@ -244,8 +244,9 @@ namespace CitisznsControllerTest
                     new Citizen
                     {
                         Id = 0,
-                        Name="Jonny Bravo",
-                        SocialSecurityNumber="1234"
+                        FirstName="Jonny",
+                        LastName= " Bravo",
+                        SocialSecurityNumber ="1234"
                     }
                     );
             }

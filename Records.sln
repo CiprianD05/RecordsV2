@@ -13,7 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RecordsRepositories", "Reco
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RecordsDTOs", "RecordsDTOs\RecordsDTOs.csproj", "{54B2F59E-3773-4FBB-A51D-52A1B09EA604}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CitisznsControllerTest", "CitisznsControllerTest\CitisznsControllerTest.csproj", "{854AF023-DC7A-481D-914B-398B1BE096FE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CitisznsControllerTest", "CitisznsControllerTest\CitisznsControllerTest.csproj", "{854AF023-DC7A-481D-914B-398B1BE096FE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RecordsFrontEnd", "RecordsFrontEnd\RecordsFrontEnd.csproj", "{82B101EE-8780-460B-BF0F-044B7C7DD491}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{854AF023-DC7A-481D-914B-398B1BE096FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{854AF023-DC7A-481D-914B-398B1BE096FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{854AF023-DC7A-481D-914B-398B1BE096FE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{82B101EE-8780-460B-BF0F-044B7C7DD491}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82B101EE-8780-460B-BF0F-044B7C7DD491}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82B101EE-8780-460B-BF0F-044B7C7DD491}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82B101EE-8780-460B-BF0F-044B7C7DD491}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

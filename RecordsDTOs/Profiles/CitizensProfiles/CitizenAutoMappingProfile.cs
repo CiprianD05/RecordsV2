@@ -17,6 +17,8 @@ namespace RecordsDTOs.Profiles.CitizensProfiles
             CreateMap<CitizensDTOs.CitizenCreateDTO, Citizen>();
             CreateMap<CitizensDTOs.CitizenUpdateDTO, Citizen>();
             CreateMap<CitizensDTOs.CitizenUpdateDTO, Task<Citizen>>();
+            CreateMap<CitizensDTOs.CitizenReadDTO, CitizensDTOs.CitizenUpdateDTO>();
+
         }
     }
 }

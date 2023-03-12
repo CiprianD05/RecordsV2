@@ -1,5 +1,6 @@
 ﻿@page "/citizens"
 @inject ICitizenService CitizenService
+@inject NavigationManager navigationManager
 
 
 <PageTitle>Citizens</PageTitle>
@@ -29,6 +30,10 @@
             <td>@citizen.LastName</td>
             <td>@citizen.SocialSecurityNumber</td>
             <td>@citizen.PassportNumber</td> 
+            <td>
+                <button class="btn btn-primary" @onclick="(()=>ShowCitizen(citizen.Id))"><i class="oi oi-pencil"></i></button>
+            </td> 
+
             </tr>
         }
     </tbody>
@@ -38,5 +43,10 @@
     protected override async Task OnInitializedAsync()
     {
         await CitizenService.GetCitizens();
+    }
+
+    void ShowCitizen(int id)
+    {
+        navigationManager.NavigateTo($"citizen/{id}");   
     }
 }

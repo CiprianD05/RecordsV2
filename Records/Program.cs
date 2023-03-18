@@ -16,7 +16,7 @@ builder.Services.AddDbContext<RecordsDbLibrary.RecordsDbContext>(opts =>
 });
 // Add services to the container.
 //builder.Services.AddRazorPages();
-builder.Services.AddControllersWithViews();
+//builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<RecordsRepositories.Interfaces.ICitizenRepo, 
     RecordsRepositories.ConcretRepos.SqlCitizensRepo>();

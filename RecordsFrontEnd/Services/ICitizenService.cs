@@ -10,5 +10,13 @@ namespace RecordsFrontEnd.Services
         Task GetCitizens();
 
         Task<HttpResponseMessage> GetCitizen(int id);
+        Task<HttpResponseMessage> DeleteCitizen(int id);
+
+        Task<HttpResponseMessage> CreateCitizen(CitizenCreateDTO citizenCreateDTO);
+
+        Task<HttpResponseMessage> UpdateCitizen(int id,CitizenUpdateDTO citizenCreateDTO);
+
+
+
     }
 }

@@ -41,31 +41,31 @@ namespace Records.Controllers
         public async Task<ActionResult<CitizenReadDTO>> CreateCitizen(CitizenCreateDTO citizenCreateDto)
         {
             var citizenModel = _mapper.Map<Citizen>(citizenCreateDto);
-            _citizenRepo.CreateCitizen(citizenModel);
+            await _citizenRepo.CreateCitizen(citizenModel);
             await _citizenRepo.SaveChanges();
             var citizenReadDto = _mapper.Map<CitizenReadDTO>(citizenModel);
-            return CreatedAtRoute(nameof(GetCitizenById), new { Id=citizenReadDto.Id},citizenReadDto);
+            return CreatedAtAction(nameof(GetCitizenById), new { id=citizenReadDto.Id},citizenReadDto);
             
         }
 
-        [HttpPut]
+        [HttpPut("{id}")]
         public async Task<ActionResult> UpdateCitizen(int Id,CitizenUpdateDTO citizenUpdateDto)
         {
 
 
-            var dbCitizen = _citizenRepo.GetAllCitizenById(Id);
+            var dbCitizen =await  _citizenRepo.GetAllCitizenById(Id);
 
             if (dbCitizen == null)
                 return NotFound();
             
-            _mapper.Map(citizenUpdateDto,dbCitizen);          
+             _mapper.Map(citizenUpdateDto,dbCitizen);          
 
              await _citizenRepo.SaveChanges();
 
             return Ok();
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteCitizen(int Id)
         {
             var dbCitizen = await _citizenRepo.GetAllCitizenById(Id);

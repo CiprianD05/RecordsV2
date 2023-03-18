@@ -3,6 +3,7 @@
 @inject ICitizenService CitizenService
 @inject NavigationManager navigationManager
 
+
 @if (Id == null)
 {
     <PageTitle>Create a new Citizen</PageTitle>
@@ -95,11 +96,7 @@ else
 
     protected override async Task OnParametersSetAsync()
     {
-        if (Id == null)
-        {
-            //create new citizen            
-        }
-        else
+        if (Id != null)
         {
             var response = await CitizenService.GetCitizen((int)Id);
 
@@ -111,13 +108,12 @@ else
                 citizenUpdateDTO.SocialSecurityNumber = citizenReadDTO.SocialSecurityNumber;
                 citizenUpdateDTO.PassportNumber = citizenReadDTO.PassportNumber;
             }
-            else if(response.StatusCode==System.Net.HttpStatusCode.NotFound)
+            else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
             {
-                navigationManager.NavigateTo($"notfound/");      
+                navigationManager.NavigateTo("notfound/");
             }
-
-
         }
+
     }
 
     protected override async Task OnInitializedAsync()
@@ -127,7 +123,35 @@ else
 
     async Task HandleSubmit()
     {
-        
+        if (Id == null)
+        {
+            var response = await CitizenService.CreateCitizen(citizenCreateDTO);
+
+            if (response.StatusCode == System.Net.HttpStatusCode.Created)
+            {
+
+                navigationManager.NavigateTo("/");
+
+            }
+            else
+            {
+                navigationManager.NavigateTo("notfound/");
+            }
+        }
+        else
+        {
+            var response = await CitizenService.UpdateCitizen((int)Id, citizenUpdateDTO);
+
+            if (response.IsSuccessStatusCode)
+            {
+                navigationManager.NavigateTo("/");
+
+            }
+            else
+            {
+                navigationManager.NavigateTo("notfound/");
+            }
+        }
 
     }
 

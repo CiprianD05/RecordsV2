@@ -28,14 +28,11 @@ namespace RecordsFrontEnd.Services
                 Citizens = result;
         }
 
-        public async Task<CitizenReadDTO> GetCitizen(int id)
+        public async Task<HttpResponseMessage> GetCitizen(int id)
         {
-            var result = await _http.GetFromJsonAsync<CitizenReadDTO>($"https://localhost:7190/api/citizens/{id}");
+            var result = await _http.GetAsync($"https://localhost:7190/api/citizens/{id}");
 
-            if (result != null)
-                return result;
-
-            throw new Exception("Hero not found");
+            return result;
         }
 
         

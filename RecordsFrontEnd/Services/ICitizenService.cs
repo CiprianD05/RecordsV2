@@ -9,6 +9,6 @@ namespace RecordsFrontEnd.Services
 
         Task GetCitizens();
 
-        Task<CitizenReadDTO> GetCitizen(int id);
+        Task<HttpResponseMessage> GetCitizen(int id);
     }
 }

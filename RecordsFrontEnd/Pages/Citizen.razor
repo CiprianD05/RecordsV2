@@ -1,18 +1,83 @@
 ﻿@page "/citizen"
 @page "/citizen/{id:int}"
 @inject ICitizenService CitizenService
+@inject NavigationManager navigationManager
 
 @if (Id == null)
 {
     <PageTitle>Create a new Citizen</PageTitle>
     <h3>Create a new Citizen</h3>
+    <EditForm Model="citizenCreateDTO" OnValidSubmit="HandleSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <div>
+            <label for="firstname">First name</label>
+            <InputText id="firstname" @bind-Value="citizenCreateDTO.FirstName" class="form-control"></InputText>
+            <ValidationMessage For="@(() =>citizenCreateDTO.FirstName)" />
+        </div>
 
+        <div>
+            <label for="lastname">Last name</label>
+            <InputText id="lastname" @bind-Value="citizenCreateDTO.LastName" class="form-control"></InputText>
+            <ValidationMessage For="@(() => citizenCreateDTO.LastName)" />
+
+        </div>
+        <div>
+            <label for="socialsecuritynumber">Social security number</label>
+            <InputText id="socialsecuritynumber" @bind-Value="citizenCreateDTO.SocialSecurityNumber" class="form-control"></InputText>
+            <ValidationMessage For="@(() => citizenCreateDTO.SocialSecurityNumber)" />
+
+        </div>
+        <div>
+            <label for="passportnumber">Passport number</label>
+            <InputText id="passportnumber" @bind-Value="citizenCreateDTO.PassportNumber" class="form-control"></InputText>
+            <ValidationMessage For="@(() => citizenCreateDTO.PassportNumber)" />
+
+        </div>
+
+        <br />
+
+        <button type="submit" class="btn btn-primary">@btnText</button>
+    </EditForm>
 }
 else
 {
     <PageTitle>Edit @citizenReadDTO.LastName</PageTitle>
 
     <h3>Edit @citizenReadDTO.LastName</h3>
+
+    <EditForm Model="citizenUpdateDTO" OnValidSubmit="HandleSubmit">
+
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div>
+            <label for="firstname">First name</label>
+            <InputText id="firstname" @bind-Value="citizenUpdateDTO.FirstName" class="form-control"></InputText>
+            <ValidationMessage For="@(() => citizenUpdateDTO.FirstName)" />
+        </div>
+
+        <div>
+            <label for="lastname">Last name</label>
+            <InputText id="lastname" @bind-Value="citizenUpdateDTO.LastName" class="form-control"></InputText>
+            <ValidationMessage For="@(() => citizenUpdateDTO.LastName)" />
+        </div>
+        <div>
+            <label for="socialsecuritynumber">Social security number</label>
+            <InputText id="socialsecuritynumber" @bind-Value="citizenUpdateDTO.SocialSecurityNumber"  class="form-control"></InputText>
+            <ValidationMessage For="@(() => citizenUpdateDTO.SocialSecurityNumber)" />
+        </div>
+        <div>
+            <label for="passportnumber">Passport number</label>
+            <InputText id="passportnumber" @bind-Value="citizenUpdateDTO.PassportNumber" class="form-control"></InputText>
+            <ValidationMessage For="@(() => citizenUpdateDTO.PassportNumber)" />
+        </div>
+
+        <br />
+
+        <button type="submit" class="btn btn-primary">@btnText</button>
+    </EditForm>
+
 }
 
 
@@ -22,6 +87,11 @@ else
     public int? Id { get; set; }
 
     public CitizenReadDTO citizenReadDTO = new CitizenReadDTO();
+    public CitizenCreateDTO citizenCreateDTO = new CitizenCreateDTO();
+    public CitizenUpdateDTO citizenUpdateDTO = new CitizenUpdateDTO();
+    string btnText = string.Empty;
+
+
 
     protected override async Task OnParametersSetAsync()
     {
@@ -31,7 +101,34 @@ else
         }
         else
         {
-            citizenReadDTO = await CitizenService.GetCitizen((int)Id);            
+            var response = await CitizenService.GetCitizen((int)Id);
+
+            if (response.IsSuccessStatusCode)
+            {
+                citizenReadDTO = await response.Content.ReadFromJsonAsync<CitizenReadDTO>();
+                citizenUpdateDTO.FirstName = citizenReadDTO.FirstName;
+                citizenUpdateDTO.LastName = citizenReadDTO.LastName;
+                citizenUpdateDTO.SocialSecurityNumber = citizenReadDTO.SocialSecurityNumber;
+                citizenUpdateDTO.PassportNumber = citizenReadDTO.PassportNumber;
+            }
+            else if(response.StatusCode==System.Net.HttpStatusCode.NotFound)
+            {
+                navigationManager.NavigateTo($"notfound/");      
+            }
+
+
         }
     }
+
+    protected override async Task OnInitializedAsync()
+    {
+        btnText = Id == null ? "Save new citizen" : "Actualize the citizen";
+    }
+
+    async Task HandleSubmit()
+    {
+        
+
+    }
+
 }

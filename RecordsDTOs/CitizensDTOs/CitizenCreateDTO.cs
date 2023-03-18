@@ -9,20 +9,20 @@ namespace RecordsDTOs.CitizensDTOs
 {
     public class CitizenCreateDTO
     {
-        [Required]
+        [Required(ErrorMessage ="First name is requeired")]
         [MaxLength(255)]
         public string FirstName { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Last name is requeired")]
         [MaxLength(255)]
         public string LastName { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Social Security Number is requeired")]
         [MaxLength(100)]
         public string SocialSecurityNumber { get; set; }
 
         [MaxLength(100)]
-        [Required]
+        [Required(ErrorMessage = "Passport Number is requeired")]
         public string? PassportNumber { get; set; }
     }
 }

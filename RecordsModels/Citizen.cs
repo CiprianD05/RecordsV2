@@ -23,5 +23,8 @@ namespace RecordsModels
         [Required]
         public string? PassportNumber { get; set; }
 
+
+        public virtual ICollection<Document> Documents { get; set; }
+
     }
 }

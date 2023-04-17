@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Data.SqlClient;
+using RecordsModels;
 
 namespace RecordsDbLibrary
 {
@@ -11,6 +12,7 @@ namespace RecordsDbLibrary
 
         public DbSet<RecordsModels.Citizen> Citizens{ get; set; }
         public DbSet<RecordsModels.DocumentType> DocumentTypes { get; set; }
+        public DbSet<Document>  Documents{ get; set; }
         public RecordsDbContext()
         {
 

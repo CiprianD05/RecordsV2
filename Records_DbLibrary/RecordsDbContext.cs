@@ -10,6 +10,7 @@ namespace RecordsDbLibrary
         private static IConfigurationRoot _configuration;
 
         public DbSet<RecordsModels.Citizen> Citizens{ get; set; }
+        public DbSet<RecordsModels.DocumentType> DocumentTypes { get; set; }
         public RecordsDbContext()
         {
 

@@ -36,9 +36,9 @@ namespace RecordsRepositories.ConcretRepos
             return await context.Citizens.SingleOrDefaultAsync(c => c.Id == Id);
         }
 
-        public IEnumerable<Citizen> GetAllCitizens()
+        public async Task<IEnumerable<Citizen>> GetAllCitizens()
         {
-            return context.Citizens;
+            return await context.Citizens.ToListAsync();
         }
 
         public async Task<bool> SaveChanges()

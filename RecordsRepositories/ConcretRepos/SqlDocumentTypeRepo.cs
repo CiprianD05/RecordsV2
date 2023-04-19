@@ -2,7 +2,6 @@
 using RecordsDbLibrary;
 using RecordsModels;
 using RecordsRepositories.Interfaces;
-using RecordsDbLibrary;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace RecordsRepositories.ConcretRepos
@@ -28,27 +27,27 @@ namespace RecordsRepositories.ConcretRepos
 
         public void DeleteDocumentType(DocumentType documentType)
         {
-            throw new NotImplementedException();
+            _context.DocumentTypes.Remove(documentType);
         }
 
         public IEnumerable<DocumentType> GetAllDocumentTypes()
         {
-            throw new NotImplementedException();
+            return _context.DocumentTypes;
         }
 
-        public Task<DocumentType> GetAllDocumentTypesById(int Id)
+        public async Task<DocumentType> GetAllDocumentTypesById(int Id)
         {
-            throw new NotImplementedException();
+            return await _context.DocumentTypes.SingleOrDefaultAsync(c => c.Id == Id);
         }
 
-        public Task<bool> SaveChanges()
+        public async Task<bool> SaveChanges()
         {
-            throw new NotImplementedException();
+            return await _context.SaveChangesAsync() > 0;
         }
 
         public void UpdateDocumentType(DocumentType documentType)
         {
-            throw new NotImplementedException();
+            
         }
     }
 }

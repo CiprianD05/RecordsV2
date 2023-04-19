@@ -20,9 +20,9 @@ namespace Records.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<CitizenReadDTO>> Get()
+        public async Task<ActionResult<IEnumerable<CitizenReadDTO>>> Get()
         {
-            var citizenList = _citizenRepo.GetAllCitizens();
+            var citizenList =await  _citizenRepo.GetAllCitizens();
             return Ok(_mapper.Map<IEnumerable<CitizenReadDTO>>(citizenList));
         }
 

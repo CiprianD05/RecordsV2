@@ -14,4 +14,8 @@
     <ProjectReference Include="..\RecordsModels\RecordsModels.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Profiles\DocumentTypesProfiles\" />
+  </ItemGroup>
+
 </Project>

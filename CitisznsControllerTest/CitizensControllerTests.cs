@@ -38,7 +38,7 @@ namespace CitisznsControllerTest
             var result = controller.Get();
 
             //Assert
-            Assert.IsType<OkObjectResult>(result.Result);
+            Assert.IsType<OkObjectResult>(result.Result.Result);
 
         }
 
@@ -53,7 +53,7 @@ namespace CitisznsControllerTest
             var result=controller.Get();
 
             //Assert
-            var okResult=result.Result as OkObjectResult;
+            var okResult=result.Result.Result as OkObjectResult;
             var citizens = okResult.Value as List<CitizenReadDTO>;
             Assert.Single(citizens);
         }
@@ -70,7 +70,7 @@ namespace CitisznsControllerTest
             var result= controller.Get();
 
             //Assert
-            Assert.IsType<OkObjectResult>(result.Result);
+            Assert.IsType<OkObjectResult>(result.Result.Result);
         }
 
         [Fact]
@@ -84,7 +84,7 @@ namespace CitisznsControllerTest
             var result = controller.Get();
             
             //Assert
-            Assert.IsType<ActionResult<IEnumerable<CitizenReadDTO>>>(result);
+            Assert.IsType<Task<ActionResult<IEnumerable<CitizenReadDTO>>>>(result);
         }
 
         [Fact]
@@ -161,7 +161,7 @@ namespace CitisznsControllerTest
             var result = await controller.CreateCitizen(new CitizenCreateDTO { });
 
             //Assert
-            Assert.IsType<CreatedAtRouteResult>(result.Result);
+            Assert.IsType<CreatedAtActionResult>(result.Result);
         }
 
         [Fact]
@@ -183,7 +183,12 @@ namespace CitisznsControllerTest
         public async void UpdateCitizen_Returns404NotFound_WhenNonexistendIdProvided()
         {
             //Arrange
-            mockRepo.Setup(repo => repo.GetAllCitizenById(0)).Returns(() => null);
+
+            Citizen citizen = null;
+            mockRepo.Setup(repo => repo.GetAllCitizenById(0)).
+                Returns(Task.FromResult(citizen));
+
+            //mockRepo.Setup(repo => repo.GetAllCitizenById(0)).Returns(() => null);
             var controller = new CitizensController(mockRepo.Object, mapper);
 
             //Act
@@ -234,7 +239,7 @@ namespace CitisznsControllerTest
             realProfile = null;
         }
 
-        private List<Citizen> GetCitizens(int num)
+        private async Task<IEnumerable<Citizen>> GetCitizens(int num)
         {
             var citizens = new List<Citizen>();
 

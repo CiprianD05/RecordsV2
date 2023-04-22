@@ -69,7 +69,7 @@ namespace Records.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteCitizen(int Id)
+        public async Task<ActionResult> DeleteDocumentType(int Id)
         {
             var dbDocumentType = await _documentTypeRepo.GetAllDocumentTypesById(Id);
 

@@ -5,15 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RecordsModels
+namespace RecordsDTOs.CocumentTypeDTOs
 {
-    public class DocumentType
+    public class DocumentTypeReadDTO
     {
-        [Required]        
         public int Id { get; set; }
 
-        [Required]
-        [MaxLength(100)]
         public string Name { get; set; }
     }
 }

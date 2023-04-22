@@ -5,15 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RecordsModels
+namespace RecordsDTOs.CocumentTypeDTOs
 {
-    public class DocumentType
+    public class DocumentTypeCreateDTO
     {
-        [Required]        
-        public int Id { get; set; }
-
-        [Required]
-        [MaxLength(100)]
+        [Required(ErrorMessage = "Name field is requeired")]
         public string Name { get; set; }
     }
 }

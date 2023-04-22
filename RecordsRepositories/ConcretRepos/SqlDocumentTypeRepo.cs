@@ -30,9 +30,9 @@ namespace RecordsRepositories.ConcretRepos
             _context.DocumentTypes.Remove(documentType);
         }
 
-        public IEnumerable<DocumentType> GetAllDocumentTypes()
+        public async Task<IEnumerable<DocumentType>> GetAllDocumentTypes()
         {
-            return _context.DocumentTypes;
+            return await _context.DocumentTypes.ToListAsync();
         }
 
         public async Task<DocumentType> GetAllDocumentTypesById(int Id)

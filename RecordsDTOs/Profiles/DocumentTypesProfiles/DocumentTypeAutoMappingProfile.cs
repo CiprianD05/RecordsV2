@@ -1,7 +1,7 @@
 ﻿
 using AutoMapper;
 using RecordsModels;
-using RecordsDTOs.CocumentTypeDTOs;
+using RecordsDTOs.DocumentTypeDTOs;
 
 namespace RecordsDTOs.Profiles.DocumentTypesProfiles
 {

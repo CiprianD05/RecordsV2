@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RecordsDTOs.CocumentTypeDTOs
+namespace RecordsDTOs.DocumentTypeDTOs
 {
     public class DocumentTypeReadDTO
     {

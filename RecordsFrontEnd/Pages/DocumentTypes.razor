@@ -1,0 +1,77 @@
+﻿@page "/documenttypes"
+@inject IDocumentTypeService documentService
+@inject NavigationManager navigationManager
+@inject IJSRuntime JsRuntime
+
+
+<PageTitle>DocumentTypes</PageTitle>
+
+
+
+<h3>Document Types</h3>
+
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th></th>
+            <th></th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var documentType in documentService.DocumentTypes)
+        {
+            <tr>
+            <td>@documentType.Id</td>
+            <td>@documentType.Name</td>         
+            <td>
+                <button class="btn btn-primary" @onclick="(()=>ShowDocumentType(documentType.Id))"><i class="oi oi-pencil"></i></button>
+            </td> 
+
+                <td>
+                    <button class="btn btn-danger" @onclick="(()=>DeleteDocumentType(documentType.Id))"><i class="oi oi-delete"></i></button>
+                </td>
+
+            </tr>
+        }
+    </tbody>
+</table>
+<button class="btn btn-primary" @onclick="(()=>CreateDocumentType())">Create new document type</button>
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        await documentService.GetDocumentTypes();
+    }
+
+    void ShowDocumentType(int id)
+    {
+        navigationManager.NavigateTo($"documenttype/{id}");   
+    }
+
+    void CreateDocumentType()
+    {
+        navigationManager.NavigateTo($"documenttype/");
+    }
+
+    async Task DeleteDocumentType(int id)
+    {
+        bool confirmed = await JsRuntime.InvokeAsync<bool>("confirm", "Are you sure?");
+        if (confirmed)
+        {
+            var response = await documentService.DeleteDocumentType(id);
+
+            if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                navigationManager.NavigateTo($"notfound/");
+            }
+
+            await documentService.GetDocumentTypes();
+            //StateHasChanged();
+        }
+
+    }
+}

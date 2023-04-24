@@ -1,22 +1,22 @@
 ﻿using RecordsDTOs.CitizensDTOs;
 using System.Net.Http.Json;
-using AutoMapper;
+
 
 namespace RecordsFrontEnd.Services
 {
     public class CitizenService : ICitizenService
     {
         private readonly HttpClient _http;
-        private readonly IMapper _mapper;
+        //private readonly IMapper _mapper;
 
 
         public List<CitizenReadDTO> Citizens { get ; set ; }= new List<CitizenReadDTO>();
 
 
-        public CitizenService(HttpClient http, IMapper mapper)
+        public CitizenService(HttpClient http)
         {
             _http = http;
-            _mapper = mapper;
+            //_mapper = mapper;
         }
 
 

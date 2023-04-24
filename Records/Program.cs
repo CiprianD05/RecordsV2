@@ -21,6 +21,9 @@ builder.Services.AddDbContext<RecordsDbLibrary.RecordsDbContext>(opts =>
 builder.Services.AddScoped<RecordsRepositories.Interfaces.ICitizenRepo, 
     RecordsRepositories.ConcretRepos.SqlCitizensRepo>();
 
+builder.Services.AddScoped<RecordsRepositories.Interfaces.IDocumentTypeRepo,
+    RecordsRepositories.ConcretRepos.SqlDocumentTypeRepo>();
+
 builder.Services.AddAutoMapper(typeof(RecordsDTOs.AnchorProfile));
 builder.Services.AddControllers();
 builder.Services.AddCors(options =>

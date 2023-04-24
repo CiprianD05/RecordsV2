@@ -14,7 +14,7 @@ namespace RecordsFrontEnd.Services
 
         Task<HttpResponseMessage> CreateCitizen(CitizenCreateDTO citizenCreateDTO);
 
-        Task<HttpResponseMessage> UpdateCitizen(int id,CitizenUpdateDTO citizenCreateDTO);
+        Task<HttpResponseMessage> UpdateCitizen(int id,CitizenUpdateDTO citizenUpdateDTO);
 
 
 

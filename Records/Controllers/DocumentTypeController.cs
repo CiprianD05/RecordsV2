@@ -2,8 +2,8 @@
 using RecordsRepositories.Interfaces;
 using RecordsModels;
 using AutoMapper;
-using RecordsDTOs.CocumentTypeDTOs;
-using RecordsDTOs.CitizensDTOs;
+using RecordsDTOs.DocumentTypeDTOs;
+
 
 namespace Records.Controllers
 {

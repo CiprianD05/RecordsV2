@@ -1,12 +1,10 @@
 ﻿using Records.Controllers;
-using System.Collections.Generic;
 using Moq;
 using AutoMapper;
 using RecordsModels;
-using RecordsRepositories;
-using RecordsDTOs.Profiles;
 using Microsoft.AspNetCore.Mvc;
-using RecordsDTOs.CocumentTypeDTOs;
+using RecordsDTOs.DocumentTypeDTOs;
+
 
 
 namespace CitisznsControllerTest
@@ -22,6 +20,7 @@ namespace CitisznsControllerTest
 
         public DocumentTypesControllerTests()
         {
+            mockRepo = new Mock<RecordsRepositories.Interfaces.IDocumentTypeRepo>();
             mockRepo = new Mock<RecordsRepositories.Interfaces.IDocumentTypeRepo>();
             realProfile = new RecordsDTOs.Profiles.DocumentTypesProfiles.DocumentTypeAutoMappingProfile();
             configuration = new MapperConfiguration(cfg => cfg.AddProfile(realProfile));

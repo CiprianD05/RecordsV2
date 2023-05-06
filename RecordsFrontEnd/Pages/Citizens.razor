@@ -19,8 +19,10 @@
             <th>Last Name</th>
             <th>Social security number</th>
             <th>Passport number</th>
-            <th></th>
-            <th></th>
+            <th>Edit Citizen</th>
+            <th>Delete Citizen</th>
+            <th>Add Document</th>
+
 
         </tr>
     </thead>
@@ -41,6 +43,10 @@
                     <button class="btn btn-danger" @onclick="(()=>DeleteCitizen(citizen.Id))"><i class="oi oi-delete"></i></button>
                 </td>
 
+                <td>
+                    <button class="btn btn-primary" @onclick="(()=>Documents(citizen.Id))"><i class="oi oi-folder"></i></button>
+                </td>
+
             </tr>
         }
     </tbody>
@@ -56,6 +62,11 @@
     void ShowCitizen(int id)
     {
         navigationManager.NavigateTo($"citizen/{id}");   
+    }
+
+    void Documents(int id)
+    {
+        navigationManager.NavigateTo($"documents/{id}");
     }
 
     void CreateCitizen()

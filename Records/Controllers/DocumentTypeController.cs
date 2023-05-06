@@ -4,6 +4,8 @@ using RecordsModels;
 using AutoMapper;
 using RecordsDTOs.DocumentTypeDTOs;
 
+using Records.Functionalities.Interfaces;
+
 
 namespace Records.Controllers
 {
@@ -13,12 +15,23 @@ namespace Records.Controllers
     {
         private readonly IDocumentTypeRepo _documentTypeRepo;
         private readonly IMapper _mapper;
+        private IStringManipulation _stringManipulation;
+
 
         public DocumentTypeController(IDocumentTypeRepo documentTypeRepo, IMapper mapper)
         {
             _documentTypeRepo = documentTypeRepo;
             _mapper = mapper;
+
         }
+        public DocumentTypeController(IDocumentTypeRepo documentTypeRepo, IMapper mapper, IStringManipulation stringManipulation)
+        {
+            _documentTypeRepo = documentTypeRepo;
+            _mapper = mapper;
+            _stringManipulation= stringManipulation;
+        }
+
+        
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<DocumentTypeReadDTO>>> GetDocumentTypes()
@@ -44,6 +57,7 @@ namespace Records.Controllers
         public async Task<ActionResult<DocumentTypeReadDTO>> CreateDocumentType(DocumentTypeCreateDTO documentTypeCreateDto)
         {
             var documentTypeModel = _mapper.Map<DocumentType>(documentTypeCreateDto);
+            documentTypeModel.Abbreviation = _stringManipulation.AbbreviationExtractor(documentTypeCreateDto.Name);
             await _documentTypeRepo.CreateDocumentType(documentTypeModel);
             await _documentTypeRepo.SaveChanges();
             var documentTypeReadDto = _mapper.Map<DocumentTypeReadDTO>(documentTypeModel);
@@ -62,7 +76,7 @@ namespace Records.Controllers
                 return NotFound();
 
             _mapper.Map(documentTypeUpdateDto, dbDocumentType);
-
+            dbDocumentType.Abbreviation = _stringManipulation.AbbreviationExtractor(documentTypeUpdateDto.Name);
             await _documentTypeRepo.SaveChanges();
 
             return Ok();

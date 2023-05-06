@@ -24,6 +24,16 @@ builder.Services.AddScoped<RecordsRepositories.Interfaces.ICitizenRepo,
 builder.Services.AddScoped<RecordsRepositories.Interfaces.IDocumentTypeRepo,
     RecordsRepositories.ConcretRepos.SqlDocumentTypeRepo>();
 
+builder.Services.AddScoped<RecordsRepositories.Interfaces.IDocumentRepo,
+    RecordsRepositories.ConcretRepos.SqlDocumentRepo>();
+
+builder.Services.AddScoped<Records.Functionalities.Interfaces.IStringManipulation,
+    Records.Functionalities.ConcreteImpl.StringManipulation>();
+
+builder.Services.AddScoped<Records.Functionalities.Interfaces.IFolderManipulation,
+    Records.Functionalities.ConcreteImpl.FolderManipulation>();
+
+
 builder.Services.AddAutoMapper(typeof(RecordsDTOs.AnchorProfile));
 builder.Services.AddControllers();
 builder.Services.AddCors(options =>

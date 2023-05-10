@@ -18,12 +18,12 @@ namespace Records.Controllers
         private IStringManipulation _stringManipulation;
 
 
-        public DocumentTypeController(IDocumentTypeRepo documentTypeRepo, IMapper mapper)
-        {
-            _documentTypeRepo = documentTypeRepo;
-            _mapper = mapper;
+        //public DocumentTypeController(IDocumentTypeRepo documentTypeRepo, IMapper mapper)
+        //{
+        //    _documentTypeRepo = documentTypeRepo;
+        //    _mapper = mapper;
 
-        }
+        //}
         public DocumentTypeController(IDocumentTypeRepo documentTypeRepo, IMapper mapper, IStringManipulation stringManipulation)
         {
             _documentTypeRepo = documentTypeRepo;

@@ -4,7 +4,8 @@ using AutoMapper;
 using RecordsModels;
 using Microsoft.AspNetCore.Mvc;
 using RecordsDTOs.DocumentTypeDTOs;
-
+using Records.Functionalities.Interfaces;
+using Records.Functionalities.ConcreteImpl;
 
 
 namespace CitisznsControllerTest
@@ -16,15 +17,18 @@ namespace CitisznsControllerTest
         RecordsDTOs.Profiles.DocumentTypesProfiles.DocumentTypeAutoMappingProfile realProfile;
         MapperConfiguration configuration;
         IMapper mapper;
+        Mock<IStringManipulation> _stringManipulation;
+
 
 
         public DocumentTypesControllerTests()
         {
-            mockRepo = new Mock<RecordsRepositories.Interfaces.IDocumentTypeRepo>();
+            
             mockRepo = new Mock<RecordsRepositories.Interfaces.IDocumentTypeRepo>();
             realProfile = new RecordsDTOs.Profiles.DocumentTypesProfiles.DocumentTypeAutoMappingProfile();
             configuration = new MapperConfiguration(cfg => cfg.AddProfile(realProfile));
             mapper = new Mapper(configuration);
+            _stringManipulation = new Mock<IStringManipulation>();
         }
 
 
@@ -33,7 +37,7 @@ namespace CitisznsControllerTest
         {
             //Arrange            
             mockRepo.Setup(repo => repo.GetAllDocumentTypes()).Returns(GetDocumentTypes(0));
-            var controller = new DocumentTypeController(mockRepo.Object, mapper);
+            var controller = new DocumentTypeController(mockRepo.Object, mapper ,_stringManipulation.Object);
 
             //Act
             var result = controller.GetDocumentTypes();
@@ -47,7 +51,7 @@ namespace CitisznsControllerTest
         {
             //Arrange
             mockRepo.Setup(repo => repo.GetAllDocumentTypes()).Returns(GetDocumentTypes(1));
-            var controller = new DocumentTypeController(mockRepo.Object, mapper);
+            var controller = new DocumentTypeController(mockRepo.Object, mapper, _stringManipulation.Object);
 
             //Act
             var result = controller.GetDocumentTypes();
@@ -65,7 +69,7 @@ namespace CitisznsControllerTest
             //Arrange
             mockRepo.Setup(repo => repo.GetAllDocumentTypes()).Returns(GetDocumentTypes(1));
 
-            var controller = new DocumentTypeController(mockRepo.Object, mapper);
+            var controller = new DocumentTypeController(mockRepo.Object, mapper, _stringManipulation.Object);
 
 
             //Act
@@ -81,7 +85,7 @@ namespace CitisznsControllerTest
             //Arrange
             mockRepo.Setup(repo => repo.GetAllDocumentTypes()).Returns(GetDocumentTypes(1));
 
-            var controller = new DocumentTypeController(mockRepo.Object, mapper);
+            var controller = new DocumentTypeController(mockRepo.Object, mapper, _stringManipulation.Object);
 
 
             //Act
@@ -98,7 +102,7 @@ namespace CitisznsControllerTest
             DocumentType documentType= null;
             mockRepo.Setup(repo => repo.GetAllDocumentTypesById(0)).
                 Returns(Task.FromResult(documentType));
-            var controller = new DocumentTypeController(mockRepo.Object, mapper);
+            var controller = new DocumentTypeController(mockRepo.Object, mapper, _stringManipulation.Object);
 
             //Act
             var result = await controller.GetDocumentTypeById(0);
@@ -114,7 +118,7 @@ namespace CitisznsControllerTest
             //Arrange
             mockRepo.Setup(repo => repo.GetAllDocumentTypesById(1)).
                 Returns(Task.FromResult(new DocumentType { Id = 1, Name= "Mandat Supraveghere Thenica"}));
-            var controller = new DocumentTypeController(mockRepo.Object, mapper);
+            var controller = new DocumentTypeController(mockRepo.Object, mapper, _stringManipulation.Object);
 
             //Act
             var result = await controller.GetDocumentTypeById(1);
@@ -129,7 +133,7 @@ namespace CitisznsControllerTest
             //Arrange
             mockRepo.Setup(repo => repo.GetAllDocumentTypesById(1)).
                 Returns(Task.FromResult(new DocumentType { Id = 1, Name = "Mandat Supraveghere Thenica" }));
-            var controller = new DocumentTypeController(mockRepo.Object, mapper);
+            var controller = new DocumentTypeController(mockRepo.Object, mapper, _stringManipulation.Object);
 
             //Act
             var result = await controller.GetDocumentTypeById(1);
@@ -145,7 +149,8 @@ namespace CitisznsControllerTest
             //Arrange
             mockRepo.Setup(repo => repo.GetAllDocumentTypesById(1)).
                 Returns(Task.FromResult(new DocumentType { Id = 1, Name = "Mandat Supraveghere Thenica" }));
-            var controller = new DocumentTypeController(mockRepo.Object, mapper);
+            _stringManipulation.Setup(sm => sm.AbbreviationExtractor("Random")).Returns("ok");
+            var controller = new DocumentTypeController(mockRepo.Object, mapper, _stringManipulation.Object);
 
             //Act
             var result = await controller.CreateDocumentType(new DocumentTypeCreateDTO { });
@@ -161,7 +166,8 @@ namespace CitisznsControllerTest
             //Arrange
             mockRepo.Setup(repo => repo.GetAllDocumentTypesById(1)).
                 Returns(Task.FromResult(new DocumentType { Id = 1, Name = "Mandat Supraveghere Thenica" }));
-            var controller = new DocumentTypeController(mockRepo.Object, mapper);
+            _stringManipulation.Setup(sm => sm.AbbreviationExtractor("Random")).Returns("ok");
+            var controller = new DocumentTypeController(mockRepo.Object, mapper, _stringManipulation.Object);
 
             //Act
             var result = await controller.UpdateDocumentType(1,new DocumentTypeUpdateDTO { });
@@ -181,7 +187,7 @@ namespace CitisznsControllerTest
                 Returns(Task.FromResult(documentType));
 
             //mockRepo.Setup(repo => repo.GetAllCitizenById(0)).Returns(() => null);
-            var controller = new DocumentTypeController(mockRepo.Object, mapper);
+            var controller = new DocumentTypeController(mockRepo.Object, mapper, _stringManipulation.Object);
 
             //Act
             var result = await controller.UpdateDocumentType(0, new DocumentTypeUpdateDTO{ });
@@ -196,7 +202,7 @@ namespace CitisznsControllerTest
             //Arrange
             mockRepo.Setup(repo => repo.GetAllDocumentTypesById(1)).
                 Returns(Task.FromResult(new DocumentType { Id = 1, Name= "Mandat Supraveghere Tehnica"}));
-            var controller = new DocumentTypeController(mockRepo.Object, mapper);
+            var controller = new DocumentTypeController(mockRepo.Object, mapper, _stringManipulation.Object);
 
             //Act
             var result = await controller.DeleteDocumentType(1);
@@ -216,7 +222,7 @@ namespace CitisznsControllerTest
                 Returns(Task.FromResult(documentType));
 
             //mockRepo.Setup(repo => repo.GetAllCitizenById(0)).Returns(() => null);
-            var controller = new DocumentTypeController(mockRepo.Object, mapper);
+            var controller = new DocumentTypeController(mockRepo.Object, mapper, _stringManipulation.Object);
 
             //Act
             var result = await controller.DeleteDocumentType(0);
@@ -234,6 +240,7 @@ namespace CitisznsControllerTest
             mapper = null;
             configuration = null;
             realProfile = null;
+            _stringManipulation = null;
         }
 
 

@@ -51,14 +51,14 @@ namespace RecordsControllerTests
         public void GetDocumentItems_ReturnsZeroItems_WhenDBIsEmpty()
         {
             //Arrange            
-            documentMockRepo.Setup(repo => repo.GetAllDocuments()).Returns(GetDocument(0));
+            documentMockRepo.Setup(repo => repo.GetAllDocuments(1)).Returns(GetDocument(0));
             var controller = new DocumentsController(mapper, documentMockRepo.Object,
                documentTypeMockRepo.Object,
                citizenMockRepo.Object,               
                _folderManipulation.Object);
 
             //Act
-            var result = controller.GetDocuments();
+            var result = controller.GetDocuments(1);
 
             //Assert
             Assert.IsType<OkObjectResult>(result.Result.Result);
@@ -69,14 +69,14 @@ namespace RecordsControllerTests
         public void GetAllDocuments_ReturnsOneItem_WhenDBHasOneResource()
         {
             //Arrange
-            documentMockRepo.Setup(repo => repo.GetAllDocuments()).Returns(GetDocument(1));
+            documentMockRepo.Setup(repo => repo.GetAllDocuments(1)).Returns(GetDocument(1));
             var controller = new DocumentsController(mapper, documentMockRepo.Object,
                documentTypeMockRepo.Object,
                citizenMockRepo.Object,
                _folderManipulation.Object);
 
             //Act
-            var result = controller.GetDocuments();
+            var result = controller.GetDocuments(1);
 
             //Assert
             var okResult = result.Result.Result as OkObjectResult;
@@ -88,7 +88,7 @@ namespace RecordsControllerTests
         public void GetAllDocuments_RetrunsOk_WhenDBHasOneResource()
         {
             //Arrange
-            documentMockRepo.Setup(repo => repo.GetAllDocuments()).Returns(GetDocument(1));
+            documentMockRepo.Setup(repo => repo.GetAllDocuments(1)).Returns(GetDocument(1));
             var controller = new DocumentsController(mapper, documentMockRepo.Object,
                documentTypeMockRepo.Object,
                citizenMockRepo.Object,
@@ -96,7 +96,7 @@ namespace RecordsControllerTests
 
 
             //Act
-            var result = controller.GetDocuments();
+            var result = controller.GetDocuments(1);
 
             //Assert
             Assert.IsType<OkObjectResult>(result.Result.Result);
@@ -106,7 +106,7 @@ namespace RecordsControllerTests
         public void GetAllDocuments_ReturnsCorrectType_WhenDBHasOneResource()
         {
             //Arrange
-            documentMockRepo.Setup(repo => repo.GetAllDocuments()).Returns(GetDocument(1));
+            documentMockRepo.Setup(repo => repo.GetAllDocuments(1)).Returns(GetDocument(1));
             var controller = new DocumentsController(mapper, documentMockRepo.Object,
                documentTypeMockRepo.Object,
                citizenMockRepo.Object,
@@ -114,7 +114,7 @@ namespace RecordsControllerTests
 
 
             //Act
-            var result = controller.GetDocuments();
+            var result = controller.GetDocuments(1);
 
             //Assert
             Assert.IsType<Task<ActionResult<IEnumerable<DocumentReadDTO>>>>(result);
@@ -189,7 +189,7 @@ namespace RecordsControllerTests
 
 
             //Act
-            var result = await controller.CreateDocument(new DocumentCreateDTO { });
+            var result = await controller.CreateDocument(1,1,new DocumentCreateDTO { });
 
             //Assert
             Assert.IsType<ActionResult<DocumentReadDTO>>(result);

@@ -7,20 +7,10 @@ namespace RecordsDTOs.DocumentDTOs
 {
     public class DocumentCreateDTO
     {
-        
-        [Required]
+
         public int CitizenId { get; set; }
-
-        [Required]
-        public IFormFile File{ get; set; }
-
-        [Required]
         public int DocumentTypeId { get; set; }
-
-               
-
-        public DocumentType DocumentType { get; set; }
-        public Citizen Citizen { get; set; }
+        public IFormFile Files { get; set; }
 
 
     }

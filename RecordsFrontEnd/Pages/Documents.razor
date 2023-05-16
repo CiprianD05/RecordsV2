@@ -1,11 +1,89 @@
-﻿@page "/documents/{id:int}"
-
+﻿@page "/documents/{CitizenId:int}"
+@inject IDocumentService DocumentService
+@inject NavigationManager navigationManager
+@inject IJSRuntime JsRuntime
 
 <PageTitle>Documents</PageTitle>
 
 <h3>Documents</h3>
 
+
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>DocumentNameName</th>            
+            <th>Edit Document</th>
+            <th>Delete Document</th>
+            
+
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var document in DocumentService.Documents)
+        {
+            <tr>
+                <td>@document.Id</td>
+                <td>@document.Name</td>
+                
+                <td>
+                    <button class="btn btn-primary" @onclick="(()=>ShowDocument(document.Id))"><i class="oi oi-pencil"></i></button>
+                </td>
+
+                <td>
+                    <button class="btn btn-danger" @onclick="(()=>DeleteDocument(document.Id))"><i class="oi oi-delete"></i></button>
+                </td>
+
+               
+
+            </tr>
+        }
+    </tbody>
+</table>
+
+<button class="btn btn-primary" @onclick="(()=>CreateDocument(CitizenId))">Add new document</button>
+
+
+
+
+
 @code {
     [Parameter]
-    public int? Id { get; set; }
+    public int CitizenId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await DocumentService.GetDocuments(CitizenId);
+    }
+
+
+    void ShowDocument(int documentId)
+    {
+        navigationManager.NavigateTo($"documentId/{documentId}");
+    }
+
+    void CreateDocument(int citizenId)
+    {
+        navigationManager.NavigateTo($"document/citizen/{citizenId}");
+    }
+
+    async Task DeleteDocument(int id)
+    {
+        bool confirmed = await JsRuntime.InvokeAsync<bool>("confirm", "Are you sure?");
+        if (confirmed)
+        {
+            var response = await DocumentService.DeleteDocument(id);
+
+            if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                navigationManager.NavigateTo($"notfound/");
+            }
+
+            await DocumentService.GetDocuments(CitizenId);
+            //StateHasChanged();
+        }
+
+    }
 }

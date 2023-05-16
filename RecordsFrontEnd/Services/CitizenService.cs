@@ -34,7 +34,12 @@ namespace RecordsFrontEnd.Services
 
             return result;
         }
+        public async Task<HttpResponseMessage> CreateCitizen(CitizenCreateDTO citizenCreateDTO)
+        {
+            var result = await _http.PostAsJsonAsync($"https://localhost:7190/api/citizens/", citizenCreateDTO);
 
+            return result;
+        }
         public async Task<HttpResponseMessage> DeleteCitizen(int id)
         {
             var result = await _http.DeleteAsync($"https://localhost:7190/api/citizens/{id}");
@@ -42,12 +47,7 @@ namespace RecordsFrontEnd.Services
             return result;
         }
 
-        public async Task<HttpResponseMessage> CreateCitizen(CitizenCreateDTO citizenCreateDTO)
-        {
-            var result = await _http.PostAsJsonAsync($"https://localhost:7190/api/citizens/",citizenCreateDTO);
-
-            return result;
-        }
+        
 
         public async Task<HttpResponseMessage> UpdateCitizen(int id, CitizenUpdateDTO citizenUpdateDTO)
         {

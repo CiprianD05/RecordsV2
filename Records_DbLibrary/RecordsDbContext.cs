@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Data.SqlClient;
 using RecordsModels;
+using Microsoft.EntityFrameworkCore.Proxies;
 
 namespace RecordsDbLibrary
 {
@@ -45,9 +46,9 @@ namespace RecordsDbLibrary
                 conStrBuilder.Password = configuration["Password"];
                 var connection = conStrBuilder.ConnectionString;
 
-                
 
 
+                //optionsBuilder.UseLazyLoadingProxies();
                 optionsBuilder.UseSqlServer(connection);
             }
         }

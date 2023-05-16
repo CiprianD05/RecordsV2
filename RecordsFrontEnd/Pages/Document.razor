@@ -1,0 +1,234 @@
+﻿@page "/document/{documentId:int?}"
+@page "/document/citizen/{citizenId:int?}"
+@using System.Net.Http.Headers;
+
+
+@inject ICitizenService CitizenService
+@inject IDocumentService DocumentService
+@inject IDocumentTypeService DocumentTypeService
+
+
+@inject NavigationManager navigationManager
+@inject IJSRuntime JsRuntime
+
+
+@if (DocumentId == null)
+{
+    <PageTitle>Create a new Document</PageTitle>
+    <h3>Create a new Document</h3>
+    <EditForm Model="documentCreateDTO" OnValidSubmit="HandleSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <div>
+            <label for="file">File</label>
+            <InputFile OnChange="@OnInputFileChange" class="form-control" multiple accept=".pdf" />
+        </div>
+
+        @*<div>
+            <label for="CitizenId">Citizen Name</label>
+            <InputSelect id="CitizenId" @bind-Value="documentCreateDTO.CitizenId" class="form-select">
+                @foreach(var citizen in CitizenService.Citizens)
+                {
+                    <option value="@citizen.Id">@citizen.FirstName+" " +@citizen.LastName</option>
+                }
+            </InputSelect>
+            <ValidationMessage For="@(() => documentCreateDTO.CitizenId)" />
+
+        </div>*@
+        <div>
+            <label for="DocumentTypeId">Document type</label>
+            <InputSelect id="DocumentTypeId" @bind-Value="documentCreateDTO.DocumentTypeId" class="form-select">
+                <option></option>
+                @foreach (var documentType in DocumentTypeService.DocumentTypes)
+                {
+                    <option value="@documentType.Id">@documentType.Name</option>
+                }
+            </InputSelect>
+            <ValidationMessage For="@(() => documentCreateDTO.DocumentTypeId)" />
+
+        </div>
+
+        <br />
+
+        <button type="submit" class="btn btn-primary">@btnText</button>
+    </EditForm>
+}
+else
+{
+    <PageTitle>Edit @documentReadDTO.Name</PageTitle>
+
+    <h3>Edit @documentReadDTO.Name</h3>
+
+    <EditForm Model="documentUpdateDTO" OnValidSubmit="HandleSubmit">
+
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div>
+            <label for="file">File</label>
+            <InputFile id="file" @bind-Value="documentUpdateDTO.File" class="form-control"></InputFile>
+            <ValidationMessage For="@(() =>documentUpdateDTO.File)" />
+        </div>
+
+        <div>
+            <label for="CitizenId">Citizen Name</label>
+            <InputSelect id="CitizenId" @bind-Value="documentUpdateDTO.CitizenId" class="form-select">
+                @foreach (var citizen in CitizenService.Citizens)
+                {
+                    <option value="@citizen.Id">@citizen.FirstName+" " +@citizen.LastName</option>
+                }
+            </InputSelect>
+            <ValidationMessage For="@(() => documentUpdateDTO.CitizenId)" />
+
+        </div>
+        <div>
+            <label for="DocumentTypeId">Document type</label>
+            <InputSelect id="DocumentTypeId" @bind-Value="documentUpdateDTO.DocumentTypeId" class="form-select">
+                @foreach (var documentType in DocumentTypeService.DocumentTypes)
+                {
+                    <option value="@documentType.Id">@documentType.Name</option>
+                }
+            </InputSelect>
+            <ValidationMessage For="@(() => documentUpdateDTO.DocumentTypeId)" />
+
+        </div>
+
+        <br />
+
+        <button type="submit" class="btn btn-primary">@btnText</button>
+    </EditForm>
+    <p>@uploadStatus</p>
+}
+
+
+@code {
+
+    [Parameter]
+    public int CitizenId { get; set; }
+    [Parameter]
+    public int? DocumentId { get; set; }
+
+
+    public DocumentReadDTO documentReadDTO = new DocumentReadDTO();
+    public DocumentCreateDTO documentCreateDTO ;
+    public DocumentUpdateDTO documentUpdateDTO = new DocumentUpdateDTO();
+    string btnText = string.Empty;
+
+
+    private string uploadStatus;
+
+    private short maxAllowedFiles = 1;
+    private long maxiFileSize = long.MaxValue;
+    private MultipartFormDataContent content=new MultipartFormDataContent();
+    private IBrowserFile file;
+    private StreamContent fileContent;
+
+    private async Task OnInputFileChange(InputFileChangeEventArgs e)
+    {
+        file = e.File;
+        fileContent = new StreamContent(file.OpenReadStream());
+        fileContent.Headers.ContentType = new MediaTypeHeaderValue("application/pdf");
+        fileContent.Headers.Add("Content-Disposition", $"form-data; name=\"Files\"; filename=\"{file.Name}\"");
+
+
+
+    }
+    async Task HandleSubmit()
+    {
+        if (DocumentId == null)
+        {
+
+            //Console.WriteLine(documentCreateDTO == null);
+
+            var formData = new MultipartFormDataContent();
+            
+            formData.Add(new StringContent(CitizenId.ToString()), "CitizenId");
+            formData.Add(new StringContent(documentCreateDTO.DocumentTypeId.ToString()), "DocumentTypeId");
+            formData.Add(fileContent,"Files",file.Name);
+
+
+            
+
+            // Use HttpClient to upload the file
+            var response = await DocumentService.CreateDocument(CitizenId,documentCreateDTO.DocumentTypeId,formData);
+
+            if (response.IsSuccessStatusCode)
+            {
+                uploadStatus = "File uploaded successfully.";
+            }
+            else
+            {
+                uploadStatus = "File upload failed.";
+            }
+        }
+        else
+        {
+            var response = await DocumentService.UpdateDocument((int)DocumentId, documentUpdateDTO);
+
+            if (response.IsSuccessStatusCode)
+            {
+                navigationManager.NavigateTo("/");
+
+            }
+            else
+            {
+                navigationManager.NavigateTo("notfound/");
+            }
+        }
+
+    }
+    protected override async Task OnParametersSetAsync()
+    {
+        await CitizenService.GetCitizens();
+        await DocumentTypeService.GetDocumentTypes();
+       // documentCreateDTO=new DocumentCreateDTO();
+
+
+        if (DocumentId != null)
+        {
+            var response = await DocumentService.GetDocument((int)DocumentId);
+
+            if (response.IsSuccessStatusCode)
+            {
+                documentReadDTO = await response.Content.ReadFromJsonAsync<DocumentReadDTO>();
+            }
+            else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                navigationManager.NavigateTo("notfound/");
+            }
+
+        }
+        else
+        {
+            var response = await CitizenService.GetCitizen((int)CitizenId);
+            var citizenReadDTO = new CitizenReadDTO();
+            if (response.IsSuccessStatusCode)
+            {
+                citizenReadDTO = await response.Content.ReadFromJsonAsync<CitizenReadDTO>();
+            }
+            else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                navigationManager.NavigateTo("notfound/");
+            }
+
+
+            documentCreateDTO.CitizenId = citizenReadDTO.Id;
+        }
+
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        documentCreateDTO = new DocumentCreateDTO();
+        btnText = DocumentId == null ? "Save new document" : "Actualize the document";
+        
+
+    }
+
+    
+    
+    
+    
+}
+
+

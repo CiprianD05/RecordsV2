@@ -36,9 +36,9 @@ namespace RecordsRepositories.ConcretRepos
             _context.Documents.Remove(document);
         }
 
-        public async Task<IEnumerable<Document>> GetAllDocuments()
+        public async Task<IEnumerable<Document>> GetAllDocuments(int id)
         {
-            return await _context.Documents.ToListAsync();
+            return await _context.Documents.Where(d=>d.Id==id).ToListAsync();
         }
 
         public async Task<Document> GetAllDocumentById(int Id)

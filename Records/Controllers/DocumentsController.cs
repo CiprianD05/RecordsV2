@@ -30,14 +30,17 @@ namespace Records.Controllers
 
         }
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<DocumentReadDTO>>> GetDocuments()
+        [HttpGet("citizenId/{citizenId}")]
+        public async Task<ActionResult<IEnumerable<DocumentReadDTO>>> GetDocuments(int citizenId)
         {
-            var document = await _documentRepo.GetAllDocuments();
+            var document = await _documentRepo.GetAllDocuments(citizenId);
             return Ok(_mapper.Map<IEnumerable<DocumentReadDTO>>(document));
         }
 
-        [HttpGet("{id}")]
+
+        
+
+        [HttpGet("documentId/{id}")]
         public async Task<ActionResult<DocumentReadDTO>> GetDocumentById(int id)
         {
             var documentById = await _documentRepo.GetAllDocumentById(id);
@@ -49,11 +52,15 @@ namespace Records.Controllers
         }
 
 
-        [HttpPost]
-        public async Task<ActionResult<DocumentReadDTO>> CreateDocument(DocumentCreateDTO documentCreateDto)
+        [HttpPost("{citizenId}/{documentTypeId}")]
+        public async Task<ActionResult<DocumentReadDTO>> CreateDocument(int citizenId,int documentTypeId, [FromForm] DocumentCreateDTO files)
         {            
-            var documentModel = _mapper.Map<Document>(documentCreateDto);
-
+            var documentModel =new Document() { 
+            CitizenId = citizenId,
+            DocumentTypeId = documentTypeId,
+            
+            };
+            var file = files.Files;
             documentModel.DateAdded = DateTime.Now;
             
             var documentTypeById = await _documentTypeRepo.GetAllDocumentTypesById(documentModel.DocumentTypeId);
@@ -64,12 +71,13 @@ namespace Records.Controllers
             if (citizenById == null)
                 return NotFound();
 
-            if (documentCreateDto.File.ContentType != "application/pdf")
+            if ( file.ContentType != "application/pdf")
             {
                 return BadRequest("File must be a PDF.");
             }
 
-
+            documentModel.Citizen =await _citizenRepo.GetAllCitizenById(citizenId);
+            documentModel.DocumentType = await _documentTypeRepo.GetAllDocumentTypesById(documentTypeId);
             documentModel.Name = documentModel.Citizen.LastName +
                 documentModel.Citizen.FirstName +
                 documentModel.DocumentType.Abbreviation + "-" +
@@ -79,11 +87,15 @@ namespace Records.Controllers
 
             using (var stream = new FileStream(documentModel.Path, FileMode.Create))
             {
-                await documentCreateDto.File.CopyToAsync(stream);
+                await file.CopyToAsync(stream);
             }
 
-            await _documentRepo.CreateDocument(documentModel);
+           documentModel= await _documentRepo.CreateDocument(documentModel);
             await _documentRepo.SaveChanges();
+
+
+
+
             var documentReadDto = _mapper.Map<DocumentReadDTO>(documentModel);
             return CreatedAtAction(nameof(GetDocumentById), new { id = documentReadDto.Id }, documentReadDto);
 

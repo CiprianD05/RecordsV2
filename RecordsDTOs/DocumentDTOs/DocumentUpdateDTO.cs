@@ -19,13 +19,12 @@ namespace RecordsDTOs.DocumentDTOs
         public int DocumentTypeId { get; set; }
 
 
-        public IFormFile File { get; set; }
+        public IFormFile Files { get; set; }
 
         
 
 
-        public DocumentType DocumentType { get; set; }
-        public Citizen Citizen { get; set; }
+       
 
     }
 }

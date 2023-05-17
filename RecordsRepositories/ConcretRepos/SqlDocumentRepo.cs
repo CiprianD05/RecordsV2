@@ -38,12 +38,12 @@ namespace RecordsRepositories.ConcretRepos
 
         public async Task<IEnumerable<Document>> GetAllDocuments(int id)
         {
-            return await _context.Documents.Where(d=>d.Id==id).ToListAsync();
+            return await _context.Documents.Where(d=>d.CitizenId==id).Include(d=>d.Citizen).ToListAsync();
         }
 
         public async Task<Document> GetAllDocumentById(int Id)
         {
-            return await _context.Documents.SingleOrDefaultAsync(d => d.Id == Id);
+            return await _context.Documents.Include(d=>d.Citizen).Include(d=>d.DocumentType).SingleOrDefaultAsync(d => d.Id == Id);
         }
 
         public async Task<bool> SaveChanges()

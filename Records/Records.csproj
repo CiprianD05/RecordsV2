@@ -25,6 +25,8 @@
 
   <ItemGroup>
     <Folder Include="PDFs\" />
+    <Folder Include="PDFs\1017\3\" />
+    <Folder Include="PDFs\2003\3\" />
   </ItemGroup>
 
 </Project>

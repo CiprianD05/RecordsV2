@@ -39,6 +39,12 @@ namespace RecordsFrontEnd.Services
 
             return result;
         }
+        public async Task<HttpResponseMessage> UpdateDocument(int documentId, MultipartFormDataContent files)
+        {
+            var result = await _httpClient.PutAsync($"https://localhost:7190/api/documents/{documentId}", files);
+
+            return result;
+        }
 
         public async Task<HttpResponseMessage> DeleteDocument(int id)
         {
@@ -49,11 +55,6 @@ namespace RecordsFrontEnd.Services
 
        
 
-        public async Task<HttpResponseMessage> UpdateDocument(int id, DocumentUpdateDTO documentUpdateDTO)
-        {
-            var result = await _httpClient.PutAsJsonAsync($"https://localhost:7190/api/documents/{id}", documentUpdateDTO);
-
-            return result;
-        }
+        
     }
 }

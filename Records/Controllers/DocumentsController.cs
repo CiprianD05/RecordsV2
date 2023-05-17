@@ -102,15 +102,22 @@ namespace Records.Controllers
         }
 
 
-        [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateDocument(int Id, DocumentUpdateDTO documentUpdateDto)
+        [HttpPut("{documentId}")]
+        public async Task<ActionResult> UpdateDocument(int documentId, [FromForm] DocumentUpdateDTO files)
         {
 
 
-            var dbDocument = await _documentRepo.GetAllDocumentById(Id);
+            var dbDocument = await _documentRepo.GetAllDocumentById(documentId);
 
             if (dbDocument == null)
                 return NotFound();
+
+            var documentUpdateDto = new DocumentUpdateDTO()
+            {
+                CitizenId = files.CitizenId,
+                DocumentTypeId = files.DocumentTypeId,
+                Files = files.Files
+            };
 
             _mapper.Map(documentUpdateDto, dbDocument);
 
@@ -121,15 +128,15 @@ namespace Records.Controllers
                 dbDocument.DocumentType.Abbreviation + "-" +
                 dbDocument.DateAdded.ToString("ddMMyyyymmss");
 
-            
 
+            
             try
             {
                 System.IO.File.Delete(dbDocument.Path);
                 dbDocument.Path = _folderManipulation.CreateFoldersForDocument(dbDocument) + dbDocument.Name + ".pdf";
                 using (var stream = new FileStream(dbDocument.Path, FileMode.Create))
                 {
-                    await documentUpdateDto.File.CopyToAsync(stream);
+                    await documentUpdateDto.Files.CopyToAsync(stream);
                 }
             }catch (Exception ex) { }
 

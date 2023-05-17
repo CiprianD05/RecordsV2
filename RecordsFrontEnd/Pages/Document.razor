@@ -66,11 +66,10 @@ else
 
         <div>
             <label for="file">File</label>
-            <InputFile id="file" @bind-Value="documentUpdateDTO.File" class="form-control"></InputFile>
-            <ValidationMessage For="@(() =>documentUpdateDTO.File)" />
+            <InputFile OnChange="@OnInputFileChange" class="form-control" multiple accept=".pdf" />
         </div>
 
-        <div>
+       @* <div>
             <label for="CitizenId">Citizen Name</label>
             <InputSelect id="CitizenId" @bind-Value="documentUpdateDTO.CitizenId" class="form-select">
                 @foreach (var citizen in CitizenService.Citizens)
@@ -80,10 +79,11 @@ else
             </InputSelect>
             <ValidationMessage For="@(() => documentUpdateDTO.CitizenId)" />
 
-        </div>
+        </div>*@
         <div>
             <label for="DocumentTypeId">Document type</label>
             <InputSelect id="DocumentTypeId" @bind-Value="documentUpdateDTO.DocumentTypeId" class="form-select">
+                <option></option>
                 @foreach (var documentType in DocumentTypeService.DocumentTypes)
                 {
                     <option value="@documentType.Id">@documentType.Name</option>
@@ -111,7 +111,7 @@ else
 
     public DocumentReadDTO documentReadDTO = new DocumentReadDTO();
     public DocumentCreateDTO documentCreateDTO ;
-    public DocumentUpdateDTO documentUpdateDTO = new DocumentUpdateDTO();
+    public DocumentUpdateDTO documentUpdateDTO;
     string btnText = string.Empty;
 
 
@@ -163,7 +163,14 @@ else
         }
         else
         {
-            var response = await DocumentService.UpdateDocument((int)DocumentId, documentUpdateDTO);
+            var formData = new MultipartFormDataContent();
+
+            formData.Add(new StringContent(documentReadDTO.Citizen.Id.ToString()), "CitizenId");
+            formData.Add(new StringContent(documentUpdateDTO.DocumentTypeId.ToString()), "DocumentTypeId");
+            formData.Add(fileContent, "Files", file.Name);
+
+
+            var response = await DocumentService.UpdateDocument((int)DocumentId, formData);
 
             if (response.IsSuccessStatusCode)
             {
@@ -220,6 +227,7 @@ else
     protected override async Task OnInitializedAsync()
     {
         documentCreateDTO = new DocumentCreateDTO();
+        documentUpdateDTO = new DocumentUpdateDTO();
         btnText = DocumentId == null ? "Save new document" : "Actualize the document";
         
 

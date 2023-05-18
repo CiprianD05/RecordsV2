@@ -52,6 +52,28 @@ namespace Records.Controllers
         }
 
 
+        [HttpGet("documentPdf/{id}")]
+        public async Task<ActionResult> GetDocumentPdfById(int id)
+        {
+            var documentById = await _documentRepo.GetAllDocumentById(id);
+
+            if (documentById == null)
+                return NotFound();
+
+            var filePath = documentById.Path;
+
+            if (!System.IO.File.Exists(filePath))
+            {
+                return NotFound();
+            }
+
+            var fileContent = new FileStreamResult(new FileStream(filePath, FileMode.Open, FileAccess.Read), "application/pdf");
+            fileContent.FileDownloadName = documentById.Name;
+
+            return fileContent;
+        }
+
+
         [HttpPost("{citizenId}/{documentTypeId}")]
         public async Task<ActionResult<DocumentReadDTO>> CreateDocument(int citizenId,int documentTypeId, [FromForm] DocumentCreateDTO files)
         {            

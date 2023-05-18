@@ -15,6 +15,7 @@ namespace RecordsFrontEnd.Services
         Task<HttpResponseMessage> CreateDocument(int CitizenId, int DocumentTypeId, MultipartFormDataContent documentCreateDTO);
 
         Task<HttpResponseMessage> UpdateDocument(int documentId, MultipartFormDataContent documentUpdateDTO);
+        Task<byte[]> DownloadPdf(int id);
 
     }
 }

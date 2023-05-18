@@ -51,10 +51,19 @@ namespace RecordsFrontEnd.Services
             var result = await _httpClient.DeleteAsync($"https://localhost:7190/api/documents/{id}");
 
             return result;
-        }       
+        }
 
-       
+        public async Task<byte[]> DownloadPdf(int id)
+        {
 
-        
+            
+
+           var response = await _httpClient.GetAsync($"https://localhost:7190/api/documents/documentPdf/{id}");
+           
+
+            return await response.Content.ReadAsByteArrayAsync();
+        }
+
+
     }
 }

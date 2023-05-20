@@ -31,6 +31,9 @@ namespace Records.Controllers
         public async Task<ActionResult<PsychologicalProfileReadDTO>> GetPsychProfilesById(int psychId)
         {
             var psychProfile = await _psycRepo.GetPsychologicalProfileById(psychId);
+
+            if (psychProfile == null)
+                return NotFound();
             return Ok(_mapper.Map<PsychologicalProfileReadDTO>(psychProfile));
         }
 
@@ -63,7 +66,7 @@ namespace Records.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteCitizen(int Id)
+        public async Task<ActionResult> DeletePsychologicalProfile(int Id)
         {
             var dbPychProfile = await _psycRepo.GetPsychologicalProfileById(Id);
 

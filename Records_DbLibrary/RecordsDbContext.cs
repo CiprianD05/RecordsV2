@@ -14,6 +14,8 @@ namespace RecordsDbLibrary
         public DbSet<RecordsModels.Citizen> Citizens{ get; set; }
         public DbSet<RecordsModels.DocumentType> DocumentTypes { get; set; }
         public DbSet<Document>  Documents{ get; set; }
+
+        public DbSet<PsychologicalProfile> PsychologicalProfiles { get; set; }
         public RecordsDbContext()
         {
 

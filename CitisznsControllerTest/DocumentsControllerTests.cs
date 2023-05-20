@@ -230,8 +230,7 @@ namespace RecordsControllerTests
 
 
             //Act
-            var result = await controller.UpdateDocument(1, new DocumentUpdateDTO {Citizen=await citizenMockRepo.Object.GetAllCitizenById(1)
-                ,DocumentType=await documentTypeMockRepo.Object.GetAllDocumentTypesById(1)}   );
+            var result = await controller.UpdateDocument(1, new DocumentUpdateDTO()  );
 
             //Assert
             Assert.IsType<OkResult>(result);

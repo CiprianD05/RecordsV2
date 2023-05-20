@@ -1,13 +1,7 @@
 ﻿using RecordsModels;
 using RecordsRepositories.Interfaces;
 using RecordsDbLibrary;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using System.Xml.Linq;
 using Microsoft.EntityFrameworkCore;
 
 namespace RecordsRepositories.ConcretRepos

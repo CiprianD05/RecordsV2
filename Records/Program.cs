@@ -27,6 +27,9 @@ builder.Services.AddScoped<RecordsRepositories.Interfaces.IDocumentTypeRepo,
 builder.Services.AddScoped<RecordsRepositories.Interfaces.IDocumentRepo,
     RecordsRepositories.ConcretRepos.SqlDocumentRepo>();
 
+builder.Services.AddScoped<RecordsRepositories.Interfaces.IPsychologicalProfileRepo,
+    RecordsRepositories.ConcretRepos.SqlPsychologicalProfileRepo>();
+
 builder.Services.AddScoped<Records.Functionalities.Interfaces.IStringManipulation,
     Records.Functionalities.ConcreteImpl.StringManipulation>();
 

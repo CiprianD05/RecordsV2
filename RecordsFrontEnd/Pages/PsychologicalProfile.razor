@@ -1,0 +1,233 @@
+﻿@page "/PsychologicalProfile/{psychologicalProfileId:int?}"
+@page "/PsychologicalProfile/citizen/{citizenId:int?}"
+@using System.Net.Http.Headers;
+
+
+@inject IPsychologicalProfileService PsychologicalProfileService
+@inject ICitizenService CitizenService
+
+
+@inject NavigationManager navigationManager
+@inject IJSRuntime JsRuntime
+
+
+@if (PsychologicalProfileId == null)
+{
+    <PageTitle>Create a new Document</PageTitle>
+    <h3>Create a new Document</h3>
+    <EditForm Model="psychologicalProfileCreateDTO" OnValidSubmit="HandleSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div>
+            <label for="psychologist">Psychologist</label>
+            <InputText id="psychologist" @bind-Value="psychologicalProfileCreateDTO.Psychologist" class="form-control"></InputText>
+            <ValidationMessage For="@(() =>psychologicalProfileCreateDTO.Psychologist)" />
+        </div>
+
+        <div>
+            <label for="felony">Felony</label>
+            <InputText id="felony" @bind-Value="psychologicalProfileCreateDTO.Felony" class="form-control"></InputText>
+            <ValidationMessage For="@(() =>psychologicalProfileCreateDTO.Felony)" />
+        </div>
+
+
+        <div>
+            <label for="summary">Summary</label>
+            <InputTextArea id="felony" @bind-Value="psychologicalProfileCreateDTO.Summary" class="form-control"></InputTextArea>
+            <ValidationMessage For="@(() =>psychologicalProfileCreateDTO.Summary)" />
+        </div>
+
+        <div>
+            <label for="personalAndFamilyHistory">Personal and Family History</label>
+            <InputTextArea id="personalAndFamilyHistory" @bind-Value="psychologicalProfileCreateDTO.PersonalAndFamilyHistory" class="form-control"></InputTextArea>
+            <ValidationMessage For="@(() =>psychologicalProfileCreateDTO.PersonalAndFamilyHistory)" />
+        </div>
+
+
+        <div>
+            <label for="PersonalityTraits">Personality Traits</label>
+            <InputTextArea id="personalityTraits" @bind-Value="psychologicalProfileCreateDTO.PersonalityTraits" class="form-control"></InputTextArea>
+            <ValidationMessage For="@(() =>psychologicalProfileCreateDTO.PersonalityTraits)" />
+        </div>
+
+
+        <div>
+            <label for="impulsiveBehaviorAndAngertManagementProblems">Impulsive Behavior and AngertManagement Problems</label>
+            <InputTextArea id="impulsiveBehaviorAndAngertManagementProblems" @bind-Value="psychologicalProfileCreateDTO.ImpulsiveBehaviorAndAngertManagementProblems" class="form-control"></InputTextArea>
+            <ValidationMessage For="@(() =>psychologicalProfileCreateDTO.ImpulsiveBehaviorAndAngertManagementProblems)" />
+        </div>
+
+        <br />
+
+        <button type="submit" class="btn btn-primary">@btnText</button>
+    </EditForm>
+}
+else
+{
+    <PageTitle>Edit </PageTitle>
+
+    <h3></h3>
+
+    <EditForm Model="psychologicalProfileUpdateDTO" OnValidSubmit="HandleSubmit">
+
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div>
+            <label for="psychologist">Psychologist</label>
+            <InputText id="psychologist" @bind-Value="psychologicalProfileUpdateDTO.Psychologist" class="form-control"></InputText>
+            <ValidationMessage For="@(() =>psychologicalProfileUpdateDTO.Psychologist)" />
+        </div>
+
+        <div>
+            <label for="felony">Felony</label>
+            <InputText id="felony" @bind-Value="psychologicalProfileUpdateDTO.Felony" class="form-control"></InputText>
+            <ValidationMessage For="@(() =>psychologicalProfileUpdateDTO.Felony)" />
+        </div>
+
+
+        <div>
+            <label for="summary">Summary</label>
+            <InputTextArea id="felony" @bind-Value="psychologicalProfileUpdateDTO.Summary" class="form-control"></InputTextArea>
+            <ValidationMessage For="@(() =>psychologicalProfileUpdateDTO.Summary)" />
+        </div>
+
+        <div>
+            <label for="personalAndFamilyHistory">Personal and Family History</label>
+            <InputTextArea id="personalAndFamilyHistory" @bind-Value="psychologicalProfileUpdateDTO.PersonalAndFamilyHistory" class="form-control"></InputTextArea>
+            <ValidationMessage For="@(() =>psychologicalProfileUpdateDTO.PersonalAndFamilyHistory)" />
+        </div>
+
+
+        <div>
+            <label for="PersonalityTraits">Personality Traits</label>
+            <InputTextArea id="personalityTraits" @bind-Value="psychologicalProfileUpdateDTO.PersonalityTraits" class="form-control"></InputTextArea>
+            <ValidationMessage For="@(() =>psychologicalProfileUpdateDTO.PersonalityTraits)" />
+        </div>
+
+
+        <div>
+            <label for="impulsiveBehaviorAndAngertManagementProblems">Impulsive Behavior and AngertManagement Problems</label>
+            <InputTextArea id="impulsiveBehaviorAndAngertManagementProblems" @bind-Value="psychologicalProfileUpdateDTO.ImpulsiveBehaviorAndAngertManagementProblems" class="form-control"></InputTextArea>
+            <ValidationMessage For="@(() =>psychologicalProfileUpdateDTO.ImpulsiveBehaviorAndAngertManagementProblems)" />
+        </div>
+
+        <br />
+
+        <button type="submit" class="btn btn-primary">@btnText</button>
+    </EditForm>
+    
+}
+
+
+@code {
+
+    [Parameter]
+    public int CitizenId { get; set; }
+    [Parameter]
+    public int? PsychologicalProfileId { get; set; }
+
+
+    public PsychologicalProfileReadDTO psychologicalProfileReadDTO = new PsychologicalProfileReadDTO();
+    public PsychologicalProfileCreateDTO psychologicalProfileCreateDTO;
+    public PsychologicalProfileUpdateDTO psychologicalProfileUpdateDTO;
+    string btnText = string.Empty;
+
+
+    
+
+    
+
+   
+    async Task HandleSubmit()
+    {
+        if (PsychologicalProfileId == null)
+        {       
+
+            // Use HttpClient to upload the file
+            var response = await PsychologicalProfileService.CreateIPsychologicalProfile(psychologicalProfileCreateDTO);
+
+            if (response.IsSuccessStatusCode)
+            {
+                navigationManager.NavigateTo("/");
+
+            }
+            else
+            {
+                navigationManager.NavigateTo("notfound/");
+            }
+        }
+        else
+        {
+           
+
+
+            var response = await PsychologicalProfileService.UpdateIPsychologicalProfile((int)PsychologicalProfileId, psychologicalProfileUpdateDTO);
+
+            if (response.IsSuccessStatusCode)
+            {
+                navigationManager.NavigateTo("/");
+
+            }
+            else
+            {
+                navigationManager.NavigateTo("notfound/");
+            }
+        }
+
+    }
+    protected override async Task OnParametersSetAsync()
+    {
+        
+
+
+        if (PsychologicalProfileId != null)
+        {
+            var response = await PsychologicalProfileService.GetIPsychologicalProfile((int)PsychologicalProfileId);
+
+            if (response.IsSuccessStatusCode)
+            {
+                psychologicalProfileReadDTO = await response.Content.ReadFromJsonAsync<PsychologicalProfileReadDTO>();
+            }
+            else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                navigationManager.NavigateTo("notfound/");
+            }
+
+        }
+        else
+        {
+            var response = await CitizenService.GetCitizen((int)CitizenId);
+            var citizenReadDTO = new CitizenReadDTO();
+            if (response.IsSuccessStatusCode)
+            {
+                citizenReadDTO = await response.Content.ReadFromJsonAsync<CitizenReadDTO>();
+            }
+            else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                navigationManager.NavigateTo("notfound/");
+            }
+
+
+            psychologicalProfileCreateDTO.CitizenId = citizenReadDTO.Id;
+        }
+
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        psychologicalProfileCreateDTO = new PsychologicalProfileCreateDTO();
+        psychologicalProfileUpdateDTO = new PsychologicalProfileUpdateDTO();
+        btnText = PsychologicalProfileId == null ? "Save new document" : "Actualize the document";
+        
+
+    }
+
+    
+    
+    
+    
+}
+
+

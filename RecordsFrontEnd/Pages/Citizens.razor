@@ -22,6 +22,7 @@
             <th>Edit Citizen</th>
             <th>Delete Citizen</th>
             <th>Add Document</th>
+            <th>Psych profiles</th>
 
 
         </tr>
@@ -46,7 +47,9 @@
                 <td>
                     <button class="btn btn-primary" @onclick="(()=>Documents(citizen.Id))"><i class="oi oi-folder"></i></button>
                 </td>
-
+                <td>
+                    <button class="btn btn-primary" @onclick="(()=>PsychProfiles(citizen.Id))"><i class="oi oi-people"></i></button>
+                </td>
             </tr>
         }
     </tbody>
@@ -67,6 +70,11 @@
     void Documents(int CitizenId)
     {
         navigationManager.NavigateTo($"documents/{CitizenId}");
+    }
+
+    void PsychProfiles(int CitizenId)
+    {
+        navigationManager.NavigateTo($"psychologicalprofiles/{CitizenId}");
     }
 
     void CreateCitizen()

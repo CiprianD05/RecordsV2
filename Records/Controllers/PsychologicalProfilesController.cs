@@ -41,6 +41,7 @@ namespace Records.Controllers
         public async Task<ActionResult<PsychologicalProfileReadDTO>> CreatePsychologicalProfile(PsychologicalProfileCreateDTO psychologicalProfileCreateDto)
         {
             var psychologicalProfileModel = _mapper.Map<PsychologicalProfile>(psychologicalProfileCreateDto);
+            psychologicalProfileModel.DateAdded = DateTime.UtcNow;
             await _psycRepo.CreatePsychologicalProfile(psychologicalProfileModel);
             await _psycRepo.SaveChanges();
             var psychologicalProfileReadDto = _mapper.Map<PsychologicalProfileReadDTO>(psychologicalProfileModel);

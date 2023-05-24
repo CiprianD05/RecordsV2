@@ -1,0 +1,94 @@
+﻿@page "/psychologicalprofiles/{CitizenId:int}"
+@inject IPsychologicalProfileService PsychologicalProfileService
+@inject NavigationManager navigationManager
+@inject IJSRuntime JsRuntime
+
+<PageTitle>PsychologicalProfiles</PageTitle>
+<head>
+    
+</head>
+<h3>PsychologicalProfiles</h3>
+
+
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>PsychologicalProfile Name</th>
+            <th>Edit PsychologicalProfile</th>
+            <th>Delete PsychologicalProfile</th>
+            
+
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var psychologicalProfile in PsychologicalProfileService.PsychologicalProfiles)
+        {
+            <tr>
+                <td>@psychologicalProfile.Id</td>
+                <td>                    
+                    @psychologicalProfile.Psychologist +" "+ @psychologicalProfile.DateAdded.Date
+                </td>
+                
+                <td>
+                    <button class="btn btn-primary" @onclick="(()=>ShowPsychologicalProfile(psychologicalProfile.Id))"><i class="oi oi-pencil"></i></button>
+                </td>
+
+                <td>
+                    <button class="btn btn-danger" @onclick="(()=>DeletePsychologicalProfile(psychologicalProfile.Id))"><i class="oi oi-delete"></i></button>
+                </td>
+
+               
+
+            </tr>
+        }
+    </tbody>
+</table>
+
+<button class="btn btn-primary" @onclick="(()=>CreatePsychologicalProfile(CitizenId))">Add new psychological profile</button>
+
+
+
+
+
+@code {
+    [Parameter]
+    public int CitizenId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await PsychologicalProfileService.GetIPsychologicalProfiles(CitizenId);
+    }
+
+   
+    void ShowPsychologicalProfile(int psychologicalProfileId)
+    {
+        navigationManager.NavigateTo($"PsychologicalProfile/{psychologicalProfileId}");
+    }
+
+    void CreatePsychologicalProfile(int citizenId)
+    {
+        navigationManager.NavigateTo($"PsychologicalProfile/citizen/{citizenId}");
+    }
+
+    async Task DeletePsychologicalProfile(int id)
+    {
+        bool confirmed = await JsRuntime.InvokeAsync<bool>("confirm", "Are you sure?");
+        if (confirmed)
+        {
+            var response = await PsychologicalProfileService.DeleteIPsychologicalProfile(id);
+
+            if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                navigationManager.NavigateTo($"notfound/");
+            }
+
+            await PsychologicalProfileService.GetIPsychologicalProfiles(CitizenId);
+            //StateHasChanged();
+        }
+
+    }
+    
+}

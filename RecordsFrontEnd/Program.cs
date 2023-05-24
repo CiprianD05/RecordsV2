@@ -13,7 +13,7 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.
 builder.Services.AddScoped<ICitizenService, CitizenService>();
 builder.Services.AddScoped<IDocumentTypeService, DocumentTypeService>();
 builder.Services.AddScoped<IDocumentService, DocumentService>();
-
+builder.Services.AddScoped<IPsychologicalProfileService, PsychologicalProfileService>();
 
 
 

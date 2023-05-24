@@ -19,6 +19,10 @@ namespace RecordsModels
         public string Psychologist { get; set; }
 
         [Required]
+        public DateTime DateAdded{ get; set; }
+
+
+        [Required]
         public string Felony { get; set; }
 
         [Required]

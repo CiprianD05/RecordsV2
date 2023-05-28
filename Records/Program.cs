@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using System.Data.SqlClient;
-using Microsoft.AspNetCore.Cors;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,7 +35,8 @@ builder.Services.AddScoped<Records.Functionalities.Interfaces.IStringManipulatio
 
 builder.Services.AddScoped<Records.Functionalities.Interfaces.IFolderManipulation,
     Records.Functionalities.ConcreteImpl.FolderManipulation>();
-
+builder.Services.AddScoped<Records_ML.IPsychProfilesSimilarities,
+    Records_ML.PsychProfilesSimilarities>();
 
 builder.Services.AddAutoMapper(typeof(RecordsDTOs.AnchorProfile));
 builder.Services.AddControllers();

@@ -6,4 +6,10 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="CitizensDTOs\**" />
+    <EmbeddedResource Remove="CitizensDTOs\**" />
+    <None Remove="CitizensDTOs\**" />
+  </ItemGroup>
+
 </Project>

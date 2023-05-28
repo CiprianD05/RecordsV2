@@ -21,6 +21,7 @@
     <ProjectReference Include="..\RecordsDTOs\RecordsDTOs.csproj" />
     <ProjectReference Include="..\RecordsRepositories\RecordsRepositories.csproj" />
     <ProjectReference Include="..\Records_DbLibrary\Records_DbLibrary.csproj" />
+    <ProjectReference Include="..\Records_ML\Records_ML.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,10 +1,9 @@
 using Records.Controllers;
-using System.Collections.Generic;
+
 using Moq;
 using AutoMapper;
 using RecordsModels;
-using RecordsRepositories;
-using RecordsDTOs.Profiles;
+using Records_ML;
 using Microsoft.AspNetCore.Mvc;
 using RecordsDTOs.CitizensDTOs;
 
@@ -13,6 +12,7 @@ namespace CitisznsControllerTest
     public class CitizensControllerTests:IDisposable
     {
         Mock<RecordsRepositories.Interfaces.ICitizenRepo> mockRepo;
+        Mock<IPsychProfilesSimilarities> mockPsych;
         RecordsDTOs.Profiles.CitizensProfiles.CitizenAutoMappingProfile realProfile;
         MapperConfiguration configuration;
         IMapper mapper;
@@ -20,6 +20,7 @@ namespace CitisznsControllerTest
         public CitizensControllerTests()
         {
             mockRepo = new Mock<RecordsRepositories.Interfaces.ICitizenRepo>();
+            mockPsych = new Mock<IPsychProfilesSimilarities>();
             realProfile = new RecordsDTOs.Profiles.CitizensProfiles.CitizenAutoMappingProfile();
             configuration = new MapperConfiguration(cfg => cfg.AddProfile(realProfile));
             mapper = new Mapper(configuration);
@@ -32,7 +33,7 @@ namespace CitisznsControllerTest
         {
             //Arrange            
             mockRepo.Setup(repo => repo.GetAllCitizens()).Returns(GetCitizens(0));            
-            var controller = new CitizensController(mockRepo.Object, mapper);
+            var controller = new CitizensController(mockRepo.Object, mapper, mockPsych.Object);
 
             //Act
             var result = controller.Get();
@@ -47,7 +48,7 @@ namespace CitisznsControllerTest
         {
             //Arrange
             mockRepo.Setup(repo => repo.GetAllCitizens()).Returns(GetCitizens(1));
-            var controller= new CitizensController(mockRepo.Object, mapper);
+            var controller= new CitizensController(mockRepo.Object, mapper, mockPsych.Object);
 
             //Act
             var result=controller.Get();
@@ -64,7 +65,7 @@ namespace CitisznsControllerTest
         {
             //Arrange
             mockRepo.Setup(repo => repo.GetAllCitizens()).Returns(GetCitizens(1));
-            var controller = new CitizensController(mockRepo.Object, mapper);
+            var controller = new CitizensController(mockRepo.Object, mapper, mockPsych.Object);
 
             //Act
             var result= controller.Get();
@@ -78,7 +79,7 @@ namespace CitisznsControllerTest
         {
             //Arrange
             mockRepo.Setup(repo => repo.GetAllCitizens()).Returns(GetCitizens(1));
-            var controller = new CitizensController(mockRepo.Object, mapper);
+            var controller = new CitizensController(mockRepo.Object, mapper, mockPsych.Object);
 
             //Act
             var result = controller.Get();
@@ -94,7 +95,7 @@ namespace CitisznsControllerTest
             Citizen citizen = null;
             mockRepo.Setup(repo => repo.GetAllCitizenById(0)).
                 Returns(Task.FromResult(citizen)); 
-            var controller = new CitizensController(mockRepo.Object, mapper);
+            var controller = new CitizensController(mockRepo.Object, mapper, mockPsych.Object);
 
             //Act
             var result = await controller.GetCitizenById(0);
@@ -109,7 +110,7 @@ namespace CitisznsControllerTest
             //Arrange
             mockRepo.Setup(repo => repo.GetAllCitizenById(1)).
                 Returns(Task.FromResult(new Citizen { Id=1, SocialSecurityNumber="123",PassportNumber="123"}));
-            var controller = new CitizensController(mockRepo.Object, mapper);
+            var controller = new CitizensController(mockRepo.Object, mapper, mockPsych.Object);
 
             //Act
             var result= await controller.GetCitizenById(1);
@@ -125,7 +126,7 @@ namespace CitisznsControllerTest
             //Arrange
             mockRepo.Setup(repo => repo.GetAllCitizenById(1)).
                 Returns(Task.FromResult(new Citizen { Id = 1, SocialSecurityNumber = "123", PassportNumber = "123" }));
-            var controller = new CitizensController(mockRepo.Object, mapper);
+            var controller = new CitizensController(mockRepo.Object, mapper, mockPsych.Object);
 
             //Act
             var result = await controller.GetCitizenById(1);
@@ -140,7 +141,7 @@ namespace CitisznsControllerTest
             //Arrange
             mockRepo.Setup(repo => repo.GetAllCitizenById(1)).
                 Returns(Task.FromResult(new Citizen { Id = 1, SocialSecurityNumber = "123", PassportNumber = "123" }));
-            var controller = new CitizensController(mockRepo.Object, mapper);
+            var controller = new CitizensController(mockRepo.Object, mapper, mockPsych.Object);
 
             //Act
             var result = await controller.CreateCitizen(new CitizenCreateDTO { });
@@ -155,7 +156,7 @@ namespace CitisznsControllerTest
             //Arrange
             mockRepo.Setup(repo => repo.GetAllCitizenById(1)).
                 Returns(Task.FromResult(new Citizen { Id = 1, SocialSecurityNumber = "123", PassportNumber = "123" }));
-            var controller = new CitizensController(mockRepo.Object, mapper);
+            var controller = new CitizensController(mockRepo.Object, mapper, mockPsych.Object);
 
             //Act
             var result = await controller.CreateCitizen(new CitizenCreateDTO { });
@@ -170,7 +171,7 @@ namespace CitisznsControllerTest
             //Arrange
             mockRepo.Setup(repo => repo.GetAllCitizenById(1)).
                 Returns(Task.FromResult(new Citizen { Id = 1, SocialSecurityNumber = "123", PassportNumber = "123" }));
-            var controller = new CitizensController(mockRepo.Object, mapper);
+            var controller = new CitizensController(mockRepo.Object, mapper, mockPsych.Object);
 
             //Act
             var result = await controller.UpdateCitizen(1,new CitizenUpdateDTO { });
@@ -189,7 +190,7 @@ namespace CitisznsControllerTest
                 Returns(Task.FromResult(citizen));
 
             //mockRepo.Setup(repo => repo.GetAllCitizenById(0)).Returns(() => null);
-            var controller = new CitizensController(mockRepo.Object, mapper);
+            var controller = new CitizensController(mockRepo.Object, mapper, mockPsych.Object);
 
             //Act
             var result = await controller.UpdateCitizen(0, new CitizenUpdateDTO { });
@@ -205,7 +206,7 @@ namespace CitisznsControllerTest
             //Arrange
             mockRepo.Setup(repo => repo.GetAllCitizenById(1)).
                 Returns(Task.FromResult(new Citizen { Id = 1, SocialSecurityNumber = "123", PassportNumber = "123" }));
-            var controller = new CitizensController(mockRepo.Object, mapper);
+            var controller = new CitizensController(mockRepo.Object, mapper, mockPsych.Object);
 
             //Act
             var result = await controller.DeleteCitizen(1);
@@ -221,7 +222,7 @@ namespace CitisznsControllerTest
             Citizen citizen = null;
             mockRepo.Setup(repo => repo.GetAllCitizenById(0)).
                 Returns(Task.FromResult(citizen));
-            var controller = new CitizensController(mockRepo.Object, mapper);
+            var controller = new CitizensController(mockRepo.Object, mapper, mockPsych.Object);
 
             //Act
             var result = await controller.DeleteCitizen(0);

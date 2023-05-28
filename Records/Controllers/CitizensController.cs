@@ -3,6 +3,8 @@ using RecordsRepositories.Interfaces;
 using RecordsModels;
 using AutoMapper;
 using RecordsDTOs.CitizensDTOs;
+using RecordsDTOs.SimilaritiesDTOs;
+using Records_ML;
 
 namespace Records.Controllers
 {
@@ -12,11 +14,12 @@ namespace Records.Controllers
     {
         private readonly ICitizenRepo _citizenRepo;
         private readonly IMapper _mapper;
-
-        public CitizensController(ICitizenRepo citizenRepo, IMapper mapper)
+        private readonly IPsychProfilesSimilarities _psychSim;
+        public CitizensController(ICitizenRepo citizenRepo, IMapper mapper, IPsychProfilesSimilarities psychSimilarities)
         {
             _citizenRepo = citizenRepo;
             _mapper = mapper;
+            _psychSim= psychSimilarities;
         }
 
         [HttpGet]
@@ -35,6 +38,15 @@ namespace Records.Controllers
                 return NotFound();
 
             return Ok(_mapper.Map<CitizenReadDTO>(citizenById));
+        }
+
+
+        [HttpGet("citizenId/{citizenId}")]
+        public async Task<ActionResult<SimilaritiesReadDTO>> GetSimilarities(int citizenId)
+        {
+           var citizen=await _citizenRepo.GetAllCitizenById(citizenId);
+
+            return Ok(await _psychSim.CompareProfiles(citizen));
         }
 
         [HttpPost]

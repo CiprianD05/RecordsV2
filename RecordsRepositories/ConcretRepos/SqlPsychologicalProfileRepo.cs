@@ -41,6 +41,12 @@ namespace RecordsRepositories.ConcretRepos
             return await _context.PsychologicalProfiles.Include(pp => pp.Citizen).Where(pp => pp.Id == psychologicalProfileId).SingleOrDefaultAsync();
         }
 
+        public async Task<IEnumerable<PsychologicalProfile>> Get()
+        {
+            return await _context.PsychologicalProfiles.Include(pp => pp.Citizen).ToListAsync();
+
+        }
+
         public async Task<bool> SaveChanges()
         {
             return await _context.SaveChangesAsync()>0;

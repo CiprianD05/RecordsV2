@@ -25,11 +25,7 @@
             <ValidationMessage For="@(() =>psychologicalProfileCreateDTO.Psychologist)" />
         </div>
 
-        <div>
-            <label for="felony">Felony</label>
-            <InputText id="felony" @bind-Value="psychologicalProfileCreateDTO.Felony" class="form-control"></InputText>
-            <ValidationMessage For="@(() =>psychologicalProfileCreateDTO.Felony)" />
-        </div>
+       
 
 
         <div>
@@ -38,25 +34,7 @@
             <ValidationMessage For="@(() =>psychologicalProfileCreateDTO.Summary)" />
         </div>
 
-        <div>
-            <label for="personalAndFamilyHistory">Personal and Family History</label>
-            <InputTextArea id="personalAndFamilyHistory" @bind-Value="psychologicalProfileCreateDTO.PersonalAndFamilyHistory" class="form-control"></InputTextArea>
-            <ValidationMessage For="@(() =>psychologicalProfileCreateDTO.PersonalAndFamilyHistory)" />
-        </div>
-
-
-        <div>
-            <label for="PersonalityTraits">Personality Traits</label>
-            <InputTextArea id="personalityTraits" @bind-Value="psychologicalProfileCreateDTO.PersonalityTraits" class="form-control"></InputTextArea>
-            <ValidationMessage For="@(() =>psychologicalProfileCreateDTO.PersonalityTraits)" />
-        </div>
-
-
-        <div>
-            <label for="impulsiveBehaviorAndAngertManagementProblems">Impulsive Behavior and AngertManagement Problems</label>
-            <InputTextArea id="impulsiveBehaviorAndAngertManagementProblems" @bind-Value="psychologicalProfileCreateDTO.ImpulsiveBehaviorAndAngertManagementProblems" class="form-control"></InputTextArea>
-            <ValidationMessage For="@(() =>psychologicalProfileCreateDTO.ImpulsiveBehaviorAndAngertManagementProblems)" />
-        </div>
+       
 
         <br />
 
@@ -78,13 +56,7 @@ else
             <label for="psychologist">Psychologist</label>
             <InputText id="psychologist" @bind-Value="psychologicalProfileUpdateDTO.Psychologist" class="form-control"></InputText>
             <ValidationMessage For="@(() =>psychologicalProfileUpdateDTO.Psychologist)" />
-        </div>
-
-        <div>
-            <label for="felony">Felony</label>
-            <InputText id="felony" @bind-Value="psychologicalProfileUpdateDTO.Felony" class="form-control"></InputText>
-            <ValidationMessage For="@(() =>psychologicalProfileUpdateDTO.Felony)" />
-        </div>
+        </div>       
 
 
         <div>
@@ -93,25 +65,7 @@ else
             <ValidationMessage For="@(() =>psychologicalProfileUpdateDTO.Summary)" />
         </div>
 
-        <div>
-            <label for="personalAndFamilyHistory">Personal and Family History</label>
-            <InputTextArea id="personalAndFamilyHistory" @bind-Value="psychologicalProfileUpdateDTO.PersonalAndFamilyHistory" class="form-control"></InputTextArea>
-            <ValidationMessage For="@(() =>psychologicalProfileUpdateDTO.PersonalAndFamilyHistory)" />
-        </div>
-
-
-        <div>
-            <label for="PersonalityTraits">Personality Traits</label>
-            <InputTextArea id="personalityTraits" @bind-Value="psychologicalProfileUpdateDTO.PersonalityTraits" class="form-control"></InputTextArea>
-            <ValidationMessage For="@(() =>psychologicalProfileUpdateDTO.PersonalityTraits)" />
-        </div>
-
-
-        <div>
-            <label for="impulsiveBehaviorAndAngertManagementProblems">Impulsive Behavior and AngertManagement Problems</label>
-            <InputTextArea id="impulsiveBehaviorAndAngertManagementProblems" @bind-Value="psychologicalProfileUpdateDTO.ImpulsiveBehaviorAndAngertManagementProblems" class="form-control"></InputTextArea>
-            <ValidationMessage For="@(() =>psychologicalProfileUpdateDTO.ImpulsiveBehaviorAndAngertManagementProblems)" />
-        </div>
+       
 
         <br />
 
@@ -219,7 +173,7 @@ else
     {
         psychologicalProfileCreateDTO = new PsychologicalProfileCreateDTO();
         psychologicalProfileUpdateDTO = new PsychologicalProfileUpdateDTO();
-        btnText = PsychologicalProfileId == null ? "Save new document" : "Actualize the document";
+        btnText = PsychologicalProfileId == null ? "Save new psych profile" : "Actualize the psych profile";
         
 
     }

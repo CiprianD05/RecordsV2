@@ -113,11 +113,9 @@ namespace RecordsControllerTests
                 Returns(Task.FromResult(new PsychologicalProfile {
                     Id = 0,
                     CitizenId = 0,
-                    Felony = "asd",
-                    Summary = "asd",
-                    PersonalAndFamilyHistory = "asd",
-                    PersonalityTraits = "asda",
-                    ImpulsiveBehaviorAndAngertManagementProblems = "asda"
+                    
+                    Summary = "asd"
+                    
                 }));
             var controller = new PsychologicalProfilesController(mapper, mockRepo.Object);
 
@@ -137,12 +135,10 @@ namespace RecordsControllerTests
                 {
                     Id = 0,
                     CitizenId = 0,
-                    Felony = "asd",
-                    Summary = "asd",
-                    PersonalAndFamilyHistory = "asd",
-                    PersonalityTraits = "asda",
-                    ImpulsiveBehaviorAndAngertManagementProblems = "asda"
+
+                    Summary = "asd"
                 }));
+
             var controller = new PsychologicalProfilesController(mapper, mockRepo.Object);
 
             //Act
@@ -161,11 +157,9 @@ namespace RecordsControllerTests
                 {
                     Id = 0,
                     CitizenId = 0,
-                    Felony = "asd",
-                    Summary = "asd",
-                    PersonalAndFamilyHistory = "asd",
-                    PersonalityTraits = "asda",
-                    ImpulsiveBehaviorAndAngertManagementProblems = "asda"
+                   
+                    Summary = "asd"
+                   
                 }));
             var controller = new PsychologicalProfilesController(mapper, mockRepo.Object);
 
@@ -185,11 +179,8 @@ namespace RecordsControllerTests
                 {
                     Id = 0,
                     CitizenId = 0,
-                    Felony = "asd",
-                    Summary = "asd",
-                    PersonalAndFamilyHistory = "asd",
-                    PersonalityTraits = "asda",
-                    ImpulsiveBehaviorAndAngertManagementProblems = "asda"
+                   
+                    Summary = "asd"
                 }));
             var controller = new PsychologicalProfilesController(mapper, mockRepo.Object);
 
@@ -209,11 +200,9 @@ namespace RecordsControllerTests
                 {
                     Id = 0,
                     CitizenId = 0,
-                    Felony = "asd",
-                    Summary = "asd",
-                    PersonalAndFamilyHistory = "asd",
-                    PersonalityTraits = "asda",
-                    ImpulsiveBehaviorAndAngertManagementProblems = "asda"
+                    
+                    Summary = "asd"
+                   
                 }));
             var controller = new PsychologicalProfilesController(mapper, mockRepo.Object);
 
@@ -252,11 +241,9 @@ namespace RecordsControllerTests
                 {
                     Id = 0,
                     CitizenId = 0,
-                    Felony = "asd",
-                    Summary = "asd",
-                    PersonalAndFamilyHistory = "asd",
-                    PersonalityTraits = "asda",
-                    ImpulsiveBehaviorAndAngertManagementProblems = "asda"
+                    
+                    Summary = "asd"
+                   
                 }));
             var controller = new PsychologicalProfilesController(mapper, mockRepo.Object);
 
@@ -301,11 +288,8 @@ namespace RecordsControllerTests
                     {
                         Id = 0,
                         CitizenId= 0,
-                        Felony="asd",
-                        Summary="asd",
-                        PersonalAndFamilyHistory="asd",
-                        PersonalityTraits="asda",
-                        ImpulsiveBehaviorAndAngertManagementProblems="asda"
+                        
+                        Summary="asd"
                     }
                     );
             }

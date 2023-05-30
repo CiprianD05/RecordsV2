@@ -22,7 +22,7 @@ namespace RecordsDTOs.CitizensDTOs
         public string SocialSecurityNumber { get; set; }
 
         [MaxLength(100)]
-        [Required(ErrorMessage = "Passport Number is requeired")]
+        
         public string? PassportNumber { get; set; }
     }
 }

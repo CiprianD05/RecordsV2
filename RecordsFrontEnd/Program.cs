@@ -14,6 +14,8 @@ builder.Services.AddScoped<ICitizenService, CitizenService>();
 builder.Services.AddScoped<IDocumentTypeService, DocumentTypeService>();
 builder.Services.AddScoped<IDocumentService, DocumentService>();
 builder.Services.AddScoped<IPsychologicalProfileService, PsychologicalProfileService>();
+builder.Services.AddScoped<IPsychologicalProfileSimilaritiesService, PsychologicalProfileSimilaritiesService>();
+
 
 
 

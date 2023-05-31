@@ -49,7 +49,7 @@
 
 <button class="btn btn-primary" @onclick="(()=>CreatePsychologicalProfile(CitizenId))">Add new psychological profile</button>
 
-
+<button class="btn btn-primary" @onclick="(()=>GetPsychologicalProfileSimilarities(CitizenId))">Get Psychological Profile Similarities</button>
 
 
 
@@ -71,6 +71,11 @@
     void CreatePsychologicalProfile(int citizenId)
     {
         navigationManager.NavigateTo($"PsychologicalProfile/citizen/{citizenId}");
+    }
+
+    void GetPsychologicalProfileSimilarities(int citizenId)
+    {
+        navigationManager.NavigateTo($"PsychologicalProfileSimilarities/citizenId/{citizenId}");
     }
 
     async Task DeletePsychologicalProfile(int id)

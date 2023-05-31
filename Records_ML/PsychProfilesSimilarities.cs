@@ -2,9 +2,13 @@
 using RecordsRepositories.Interfaces;
 using Microsoft.ML;
 using AutoMapper;
-using RecordsDTOs.SimilaritiesDTOs;
+
 using RecordsDTOs.CitizensDTOs;
+using RecordsDTOs.SimilaritiesDTOs;
+
 using RecordsModels;
+using System.Linq;
+using MathNet.Numerics.LinearAlgebra;
 
 
 namespace Records_ML
@@ -15,6 +19,7 @@ namespace Records_ML
         private readonly IPsychologicalProfileRepo psychRepo;
         private readonly ICitizenRepo citizenRepo;
         private IMapper mapper;
+        private MLContext mlContext;
 
         public PsychProfilesSimilarities(IPsychologicalProfileRepo psychRepo, ICitizenRepo citizenRepo, IMapper mapper)
         {
@@ -22,50 +27,99 @@ namespace Records_ML
             this.psychRepo = psychRepo;
             this.citizenRepo = citizenRepo;
             this.mapper = mapper;
-
+            this.mlContext = new MLContext();
         }
 
-        public async Task<List<SimilaritiesReadDTO>> CompareProfiles(Citizen targetCitizen) 
+        public async Task<List<SimilaritiesReadDTO>> CompareProfiles(Citizen targetCitizen)
         {
-            
+            var allPsychProfiles = await LoadPsychologicalProfilesFromDatabase();
+
+            // Remove the target citizen's psych profiles from the list
+            var otherPsychProfiles = allPsychProfiles.Where(profile => profile.CitizenId != targetCitizen.Id).ToList();
+
+            // Create the MLContext
             var mlContext = new MLContext();
 
-            // Load the psychological profiles and citizens from your database
-            var profiles =await  LoadPsychologicalProfilesFromDatabase();
-            var citizens = await LoadCitizensFromDatabase();
+            // Prepare the data for ML.NET
+            var data = otherPsychProfiles.Select(profile => new
+            {
+                Features = profile.Summary,
+                Label = 0 // Label 0 for others
+            }).ToList();
 
-            // Create the training data using the target citizen's profiles
-            var targetCitizenId = targetCitizen.Id; 
-            var targetProfiles = profiles.Where(p => p.CitizenId == targetCitizenId).ToList();
+            // Retrieve the psych profiles of the target citizen
+            var targetPsychProfiles = await GetPsychProfilesByCitizenId(targetCitizen.Id);
+            data.AddRange(targetPsychProfiles.Select(profile => new
+            {
+                Features = profile.Summary,
+                Label = 1 // Label 1 for target citizen
+            }));
 
-            // Create the training dataset
-            var trainingData = mlContext.Data.LoadFromEnumerable(targetProfiles);
+            // Convert the data to IDataView
+            var dataView = mlContext.Data.LoadFromEnumerable(data);
 
-            // Define the similarity pipeline
-            var similarityPipeline = mlContext.Transforms.Conversion.MapValueToKey("CitizenId")
-                .Append(mlContext.Transforms.Text.FeaturizeText("Features", nameof(PsychologicalProfile.Summary)))
+            // Configure the ML pipeline
+            var pipeline = mlContext.Transforms.Text.FeaturizeText("Features", new Microsoft.ML.Transforms.Text.TextFeaturizingEstimator.Options
+            {
+                OutputTokensColumnName = "Tokens",
+                CaseMode = Microsoft.ML.Transforms.Text.TextNormalizingEstimator.CaseMode.Lower,
+                KeepDiacritics = false,
+                KeepPunctuations = false,
+                StopWordsRemoverOptions = new Microsoft.ML.Transforms.Text.StopWordsRemovingEstimator.Options(),
+            })
                 .Append(mlContext.Transforms.NormalizeMinMax("Features"))
-                .Append(mlContext.Transforms.Concatenate("Features"))
-                .Append(mlContext.Transforms.NormalizeMinMax("Features"))
-                .Append(mlContext.Transforms.Conversion.MapKeyToValue("CitizenId"))
-                .Append(mlContext.Transforms.SelectColumns("Score", "Features", nameof(PsychologicalProfile.CitizenId)));
+                .Append(mlContext.Transforms.Conversion.MapValueToKey("Label"));
 
-            // Fit the similarity pipeline to the training data
-            var trainedPipeline = similarityPipeline.Fit(trainingData);
+            // Fit the model
+            var model = pipeline.Fit(dataView);
 
-            // Create the test dataset using the rest of the population's profiles
-            var testProfiles = profiles.Where(p => p.CitizenId != targetCitizenId).ToList();
-            var testData = mlContext.Data.LoadFromEnumerable(testProfiles);
+            // Create a prediction engine
+            var engine = mlContext.Model.CreatePredictionEngine<PredictionData, PredictionResult>(model);
 
-            // Apply the trained similarity pipeline to the test data
-            var transformedData = trainedPipeline.Transform(testData);
+            // Prepare the target citizen data for prediction
+            var targetData = new PredictionData
+            {
+                Features = string.Join(" ", targetPsychProfiles.Select(profile => profile.Summary))
+            };
 
-            // Get the similarity scores and citizens from the transformed data
-            return (List<SimilaritiesReadDTO>)mlContext.Data.CreateEnumerable<SimilaritiesReadDTO>(transformedData, reuseRowObject: false).OrderByDescending(sm => sm.Score).Take(5);
+            // Predict the similarity scores for all citizens
+            List<SimilaritiesReadDTO> predictions = new List<SimilaritiesReadDTO>();
 
-            
+            foreach (var profile in otherPsychProfiles)
+            {
+                var otherData = new PredictionData
+                {
+                    Features = profile.Summary
+                };
 
+                var targetFeatures = ParseFeatures(targetData.Features, otherPsychProfiles.Count);
+                var otherFeatures = ParseFeatures(otherData.Features, otherPsychProfiles.Count);
+
+
+                // Compute the cosine similarity
+                var cosineSimilarity = CosineSimilarity(targetFeatures, otherFeatures);
+
+                var citizen = await GetCitizenById(profile.CitizenId);
+
+                var similarityReadDTO = new SimilaritiesReadDTO
+                {
+                    Score = cosineSimilarity,
+                    Citizen = new CitizenReadDTO
+                    {
+                        Id = citizen.Id,
+                        FirstName = citizen.FirstName,
+                        LastName = citizen.LastName,
+                        SocialSecurityNumber = citizen.SocialSecurityNumber,
+                        PassportNumber = citizen.PassportNumber
+                    }
+                };
+
+                predictions.Add(similarityReadDTO);
+            }
+
+            return predictions;
         }
+
         // Load the psychological profiles from the database (replace with your implementation)
         private async Task<List<PsychologicalProfile>> LoadPsychologicalProfilesFromDatabase()
         {
@@ -73,16 +127,78 @@ namespace Records_ML
             return (List<PsychologicalProfile>)await psychRepo.Get();
         }
 
+        private async Task<List<PsychologicalProfile>> GetPsychProfilesByCitizenId(int citizenId)
+        {
+            
+            return (List<PsychologicalProfile>)await psychRepo.GetAllPsychologicalProfiles(citizenId);
+        }
+
         // Load the citizens from the database (replace with your implementation)
-        private async Task<List<CitizenReadDTO>> LoadCitizensFromDatabase()
+        private async Task<List<Citizen>> LoadCitizensFromDatabase()
         {
             var citizenList = (List<Citizen>)await citizenRepo.GetAllCitizens();
 
             
             // Implement the logic to load citizens from the database
-            return (List<CitizenReadDTO>)mapper.Map<IEnumerable<CitizenReadDTO>>(citizenList);
+            return citizenList;
         }
+        private async Task< Citizen> GetCitizenById(int citizenId)
+        {
+            return await citizenRepo.GetAllCitizenById(citizenId);
+        }
+        private Vector<double> ParseFeatures(string featuresString, int dimension)
+        {
+            var featureValues = featuresString.Split(' ');
+            var featureList = new List<double>();
 
+            foreach (var featureValue in featureValues)
+            {
+                if (double.TryParse(featureValue, out double feature))
+                {
+                    featureList.Add(feature);
+                }
+                else
+                {
+                    // Handle invalid or non-numeric values
+                }
+            }
 
+            // Pad or truncate the feature list to match the expected dimensionality
+            if (featureList.Count < dimension)
+            {
+                featureList.AddRange(Enumerable.Repeat(0.0, dimension - featureList.Count));
+            }
+            else if (featureList.Count > dimension)
+            {
+                featureList = featureList.Take(dimension).ToList();
+            }
+
+            return Vector<double>.Build.DenseOfEnumerable(featureList);
+        }
+        private float CosineSimilarity(Vector<double> vectorA, Vector<double> vectorB)
+        {
+            var dotProduct = vectorA.DotProduct(vectorB);
+            var magnitudeA = vectorA.L2Norm();
+            var magnitudeB = vectorB.L2Norm();
+
+            if (magnitudeA == 0 || magnitudeB == 0)
+            {
+                return 0f;
+            }
+
+            return (float)(dotProduct / (magnitudeA * magnitudeB));
+        }
     }
+    public class PredictionData
+    {
+        public string Features { get; set; }
+        public int Label { get; set; }
+    }
+
+    public class PredictionResult
+    {
+        public float Score { get; set; }
+    }
+
+    
 }

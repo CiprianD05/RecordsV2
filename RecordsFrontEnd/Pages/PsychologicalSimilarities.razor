@@ -1,0 +1,63 @@
+﻿@page "/PsychologicalProfileSimilarities/citizenId/{CitizenId:int}"
+@inject IPsychologicalProfileSimilaritiesService PsychologicalProfileSimilaritiesService
+@inject NavigationManager navigationManager
+@inject IJSRuntime JsRuntime
+
+<PageTitle>PsychologicalProfiles</PageTitle>
+<head>
+    
+</head>
+<h3>PsychologicalProfiles</h3>
+
+
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Citizen</th>
+            <th>Score</th>
+            
+            
+
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var psychologicalProfileSimilarity in PsychologicalProfileSimilaritiesService.PsychologicalProfileSimilarities)
+        {
+            <tr>
+                <td>@psychologicalProfileSimilarity.Citizen.FirstName @psychologicalProfileSimilarity.Citizen.LastName</td>
+                <td>
+                    @(psychologicalProfileSimilarity.Score*100)%
+                </td>
+                
+                
+
+               
+
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+
+
+
+
+
+@code {
+    [Parameter]
+    public int CitizenId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await PsychologicalProfileSimilaritiesService.GetPsychologicalProfilesSimilarities(CitizenId);
+    }
+
+   
+    
+
+    
+    
+}

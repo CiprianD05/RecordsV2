@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Microsoft.ML.Data;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,8 +24,9 @@ namespace RecordsModels
         public DateTime DateAdded{ get; set; }
 
         [Required]
-        public string Summary { get; set; }        
+        public string Summary { get; set; }
 
+        [NoColumn]
         public Citizen Citizen { get; set; }
     }
 }

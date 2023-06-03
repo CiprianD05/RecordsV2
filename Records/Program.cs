@@ -1,5 +1,8 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Data.SqlClient;
+
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,6 +17,30 @@ builder.Services.AddDbContext<RecordsDbLibrary.RecordsDbContext>(opts =>
 {
     opts.UseSqlServer(connection);
 });
+
+var conStrBuilder2 = new SqlConnectionStringBuilder(
+        builder.Configuration.GetConnectionString("RecordsIdentity"));
+conStrBuilder2.UserID = builder.Configuration["UserId"];
+conStrBuilder2.Password = builder.Configuration["Password"];
+var connection2 = conStrBuilder2.ConnectionString;
+
+builder.Services.AddDbContext<Records_Identity.RecordsIdentityDbContext>(opts => {
+    opts.UseSqlServer(connection2,
+    opts => opts.MigrationsAssembly("Records_Identity")
+    );
+});
+
+
+
+
+//builder.Services.AddDbContext<Records_Identity.RecordsIdentityDbContext>(opts =>
+//{
+//    opts.UseSqlServer(connection2);
+//});
+
+
+
+
 // Add services to the container.
 //builder.Services.AddRazorPages();
 //builder.Services.AddControllersWithViews();
@@ -47,10 +74,23 @@ builder.Services.AddCors(options =>
                           .AllowAnyHeader()
                           .AllowAnyMethod());
 });
-
+//builder.Services.AddIdentity<IdentityUser, IdentityRole>(opts => {
+//    opts.Password.RequiredLength = 8;
+//    opts.Password.RequireDigit = false;
+//    opts.Password.RequireLowercase = false;
+//    opts.Password.RequireUppercase = false;
+//    opts.Password.RequireNonAlphanumeric = false;
+//    opts.SignIn.RequireConfirmedAccount = true;
+//}).AddEntityFrameworkStores<Records_Identity.RecordsIdentityDbContext>();
+//builder.Services.ConfigureApplicationCookie(opts => {
+//    opts.LoginPath = "/Identity/SignIn";
+//    //opts.LogoutPath = "/Identity/SignOut";
+//    opts.AccessDeniedPath = "/Identity/Forbidden";
+//});
 var app = builder.Build();
 
-app.UseCors("AllowOrigin");
+
+
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -62,10 +102,13 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
-app.UseAuthorization();
-
 app.UseRouting();
+app.UseCors("AllowOrigin");
+//app.UseAuthorization();
+//app.UseAuthentication();
+
+
+
 app.UseEndpoints(endpoints =>
 { 
     endpoints.MapControllers();

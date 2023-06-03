@@ -5,9 +5,11 @@ using AutoMapper;
 using RecordsDTOs.CitizensDTOs;
 using RecordsDTOs.SimilaritiesDTOs;
 using Records_ML;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Records.Controllers
 {
+   
     [Route("api/{controller}")]
     [ApiController]
     public class CitizensController : ControllerBase

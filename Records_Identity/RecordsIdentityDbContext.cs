@@ -1,30 +1,22 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Data.SqlClient;
-using RecordsModels;
-using Microsoft.EntityFrameworkCore.Proxies;
+using Microsoft.AspNetCore.Identity;
 
-namespace RecordsDbLibrary
+namespace Records_Identity
 {
-    public class RecordsDbContext : DbContext
+    public class RecordsIdentityDbContext : IdentityDbContext<IdentityUser>
     {
-
-        private static IConfigurationRoot _configuration;
-
-        public DbSet<RecordsModels.Citizen> Citizens{ get; set; }
-        public DbSet<RecordsModels.DocumentType> DocumentTypes { get; set; }
-        public DbSet<Document>  Documents{ get; set; }
-
-        public DbSet<PsychologicalProfile> PsychologicalProfiles { get; set; }
-        public RecordsDbContext()
+        public RecordsIdentityDbContext()
         {
-
+            
         }
 
-        public RecordsDbContext(DbContextOptions<RecordsDbContext> options)
-            : base(options)
+        public RecordsIdentityDbContext(DbContextOptions<RecordsIdentityDbContext> options)
+            :base(options)
         {
-
+            
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -38,12 +30,12 @@ namespace RecordsDbLibrary
                 IConfigurationRoot configuration = new ConfigurationBuilder()
                     .SetBasePath(basePath)
                     .AddJsonFile(absolutePath, optional: true)
-                    .AddUserSecrets<RecordsDbContext>()
+                    .AddUserSecrets<RecordsIdentityDbContext>()
                     .Build();
 
 
                 var conStrBuilder = new SqlConnectionStringBuilder(
-                configuration.GetConnectionString("Records"));
+                 configuration.GetConnectionString("Records"));
                 conStrBuilder.UserID = configuration["UserId"];
                 conStrBuilder.Password = configuration["Password"];
                 var connection = conStrBuilder.ConnectionString;
@@ -54,8 +46,6 @@ namespace RecordsDbLibrary
                 optionsBuilder.UseSqlServer(connection);
             }
         }
-
-        
 
 
     }

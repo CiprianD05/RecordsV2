@@ -1,4 +1,14 @@
 ﻿@page "/counter"
+@using System.Security.Claims
+
+<AuthorizeView Roles="Administrator">
+    <Authorized>
+        The user: @context.User.FindFirst(ClaimTypes.Name).Value is authorized
+    </Authorized>
+    <NotAuthorized>
+        The User is not authorized
+    </NotAuthorized>
+</AuthorizeView>
 
 <PageTitle>Counter</PageTitle>
 

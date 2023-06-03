@@ -17,7 +17,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RecordsControllerTests", "C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RecordsFrontEnd", "RecordsFrontEnd\RecordsFrontEnd.csproj", "{82B101EE-8780-460B-BF0F-044B7C7DD491}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Records_ML", "Records_ML\Records_ML.csproj", "{9E2B3CBD-4EBE-4E6B-B3A3-2152508C5B2B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Records_ML", "Records_ML\Records_ML.csproj", "{9E2B3CBD-4EBE-4E6B-B3A3-2152508C5B2B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Records_Identity", "Records_Identity\Records_Identity.csproj", "{7251C615-2871-4047-8B1D-C163A1A6CE9C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -57,6 +59,10 @@ Global
 		{9E2B3CBD-4EBE-4E6B-B3A3-2152508C5B2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9E2B3CBD-4EBE-4E6B-B3A3-2152508C5B2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9E2B3CBD-4EBE-4E6B-B3A3-2152508C5B2B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7251C615-2871-4047-8B1D-C163A1A6CE9C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7251C615-2871-4047-8B1D-C163A1A6CE9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7251C615-2871-4047-8B1D-C163A1A6CE9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7251C615-2871-4047-8B1D-C163A1A6CE9C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

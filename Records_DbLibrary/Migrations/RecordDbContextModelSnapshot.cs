@@ -51,7 +51,7 @@ namespace RecordsDbLibrary.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Citizens");
+                    b.ToTable("Citizens", (string)null);
                 });
 
             modelBuilder.Entity("RecordsModels.Document", b =>
@@ -85,7 +85,7 @@ namespace RecordsDbLibrary.Migrations
 
                     b.HasIndex("DocumentTypeId");
 
-                    b.ToTable("Documents");
+                    b.ToTable("Documents", (string)null);
                 });
 
             modelBuilder.Entity("RecordsModels.DocumentType", b =>
@@ -108,7 +108,7 @@ namespace RecordsDbLibrary.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("DocumentTypes");
+                    b.ToTable("DocumentTypes", (string)null);
                 });
 
             modelBuilder.Entity("RecordsModels.PsychologicalProfile", b =>
@@ -137,7 +137,7 @@ namespace RecordsDbLibrary.Migrations
 
                     b.HasIndex("CitizenId");
 
-                    b.ToTable("PsychologicalProfiles");
+                    b.ToTable("PsychologicalProfiles", (string)null);
                 });
 
             modelBuilder.Entity("RecordsModels.Document", b =>
